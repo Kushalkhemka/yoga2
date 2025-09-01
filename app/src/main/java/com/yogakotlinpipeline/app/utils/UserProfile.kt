@@ -24,4 +24,43 @@ data class UserProfile(
             )
         }
     }
+    
+    /**
+     * Convert UserProfile to a map for JSON serialization
+     */
+    fun toMap(): Map<String, Any> {
+        return mapOf(
+            "age" to age,
+            "height" to height,
+            "weight" to weight,
+            "level" to level,
+            "pregnant" to pregnant,
+            "problemAreas" to problemAreas,
+            "goals" to goals,
+            "mentalIssues" to mentalIssues
+        )
+    }
+    
+    /**
+     * Get physical issues from problem areas
+     */
+    fun getPhysicalIssues(): List<String> {
+        return problemAreas.filter { issue ->
+            !issue.equals("stress", ignoreCase = true) && 
+            !issue.equals("anxiety", ignoreCase = true) &&
+            !issue.equals("depression", ignoreCase = true)
+        }
+    }
+    
+    /**
+     * Get mental issues (combining problem areas and mental issues)
+     */
+    fun getAllMentalIssues(): List<String> {
+        val mentalProblemAreas = problemAreas.filter { issue ->
+            issue.equals("stress", ignoreCase = true) || 
+            issue.equals("anxiety", ignoreCase = true) ||
+            issue.equals("depression", ignoreCase = true)
+        }
+        return (mentalIssues + mentalProblemAreas).distinct()
+    }
 }

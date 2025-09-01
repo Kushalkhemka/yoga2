@@ -2,6 +2,8 @@ package com.yogakotlinpipeline.app.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class LoginCache private constructor(context: Context) {
     
@@ -23,6 +25,10 @@ class LoginCache private constructor(context: Context) {
         private const val KEY_USER_GOALS = "user_goals"
         private const val KEY_USER_MENTAL_ISSUES = "user_mental_issues"
         
+        // Recommendations Keys
+        private const val KEY_YOGA_RECOMMENDATIONS = "yoga_recommendations"
+        private const val KEY_RECOMMENDATIONS_TIMESTAMP = "recommendations_timestamp"
+        
         @Volatile
         private var INSTANCE: LoginCache? = null
         
@@ -34,6 +40,7 @@ class LoginCache private constructor(context: Context) {
     }
     
     private val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    private val gson = Gson()
     
     /**
      * Save login state and user information
@@ -120,6 +127,45 @@ class LoginCache private constructor(context: Context) {
     }
     
     /**
+     * Save yoga recommendations
+     */
+    fun saveRecommendations(recommendations: List<YogaRecommendation>) {
+        val editor = sharedPreferences.edit()
+        val recommendationsJson = gson.toJson(recommendations)
+        editor.putString(KEY_YOGA_RECOMMENDATIONS, recommendationsJson)
+        editor.putLong(KEY_RECOMMENDATIONS_TIMESTAMP, System.currentTimeMillis())
+        editor.apply()
+    }
+    
+    /**
+     * Get saved yoga recommendations
+     */
+    fun getRecommendations(): List<YogaRecommendation> {
+        val recommendationsJson = sharedPreferences.getString(KEY_YOGA_RECOMMENDATIONS, null)
+        return if (recommendationsJson != null) {
+            try {
+                val type = object : TypeToken<List<YogaRecommendation>>() {}.type
+                gson.fromJson(recommendationsJson, type) ?: emptyList()
+            } catch (e: Exception) {
+                emptyList()
+            }
+        } else {
+            emptyList()
+        }
+    }
+    
+    /**
+     * Check if recommendations exist and are recent (within 7 days)
+     */
+    fun hasRecentRecommendations(): Boolean {
+        val timestamp = sharedPreferences.getLong(KEY_RECOMMENDATIONS_TIMESTAMP, 0L)
+        val currentTime = System.currentTimeMillis()
+        val sevenDaysInMillis = 7 * 24 * 60 * 60 * 1000L
+        
+        return timestamp > 0 && (currentTime - timestamp) < sevenDaysInMillis
+    }
+    
+    /**
      * Check if user profile is complete
      */
     fun isUserProfileComplete(): Boolean {
@@ -174,6 +220,10 @@ class LoginCache private constructor(context: Context) {
         editor.remove(KEY_USER_PROBLEM_AREAS)
         editor.remove(KEY_USER_GOALS)
         editor.remove(KEY_USER_MENTAL_ISSUES)
+        
+        // Clear recommendations
+        editor.remove(KEY_YOGA_RECOMMENDATIONS)
+        editor.remove(KEY_RECOMMENDATIONS_TIMESTAMP)
         
         editor.apply()
     }

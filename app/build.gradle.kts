@@ -15,6 +15,8 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        
+        // No Chaquopy/TFLite requirements for calibration-only build
     }
 
     buildTypes {
@@ -25,6 +27,14 @@ android {
                 "proguard-rules.pro"
             )
         }
+        debug {
+            isMinifyEnabled = false
+        }
+    }
+    
+    lint {
+        abortOnError = false
+        checkReleaseBuilds = false
     }
     
     compileOptions {
@@ -39,7 +49,11 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    
+    // Chaquopy disabled for this build
 }
+
+// Chaquopy disabled for this build
 
 dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
@@ -48,6 +62,19 @@ dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.navigation:navigation-fragment-ktx:2.5.3")
     implementation("androidx.navigation:navigation-ui-ktx:2.5.3")
+    
+    // Gson for JSON serialization
+    implementation("com.google.code.gson:gson:2.10.1")
+    
+    // Retrofit for HTTP requests
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+    
+    // Coroutines for async operations
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     
     // ML Kit Pose Detection
     implementation("com.google.mlkit:pose-detection:18.0.0-beta5")

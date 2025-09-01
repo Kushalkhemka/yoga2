@@ -11,12 +11,16 @@ import androidx.navigation.fragment.findNavController
 import com.yogakotlinpipeline.app.databinding.FragmentPreference3Binding
 import com.yogakotlinpipeline.app.utils.LoginCache
 import com.yogakotlinpipeline.app.utils.UserProfile
+import com.yogakotlinpipeline.app.utils.YogaRecommendationService
+import kotlinx.coroutines.*
 
 class Preference3Fragment : Fragment() {
     
     private var _binding: FragmentPreference3Binding? = null
     private val binding get() = _binding!!
     private lateinit var loginCache: LoginCache
+    private lateinit var yogaRecommendationService: YogaRecommendationService
+    private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +35,7 @@ class Preference3Fragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         
         loginCache = LoginCache.getInstance(requireContext())
+        yogaRecommendationService = YogaRecommendationService(requireContext())
         
         setupClickListeners()
         setupRadioButtons()
@@ -172,26 +177,49 @@ class Preference3Fragment : Fragment() {
             val heightInt = height.toInt()
             val weightInt = weight.toInt()
             
-            // Create user profile
+            // Get existing problem areas and goals
+            val existingProfile = loginCache.getUserProfile()
+            
+            // Create complete user profile
             val userProfile = UserProfile(
                 age = ageInt,
                 height = heightInt,
                 weight = weightInt,
                 level = level,
                 pregnant = pregnant,
-                problemAreas = emptyList(), // Will be populated from preference1
-                goals = emptyList(), // Will be populated from preference2
+                problemAreas = existingProfile.problemAreas,
+                goals = existingProfile.goals,
                 mentalIssues = mentalIssuesList
             )
             
             // Save user profile
             loginCache.saveUserProfile(userProfile)
             
-            // Profile completed successfully
-            Toast.makeText(context, "Profile completed! Welcome to your personalized yoga journey!", Toast.LENGTH_LONG).show()
+            // Show loading message
+            Toast.makeText(context, "Generating personalized recommendations...", Toast.LENGTH_LONG).show()
             
-            // Navigate to the main app (inside1Fragment)
-            findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)
+            // Generate recommendations in background using API
+            coroutineScope.launch {
+                try {
+                    val recommendations = yogaRecommendationService.getTopRecommendations(userProfile)
+                    
+                    if (recommendations.isNotEmpty()) {
+                        // Save recommendations to cache for later use
+                        loginCache.saveRecommendations(recommendations)
+                        
+                        Toast.makeText(context, "Profile completed! Personalized recommendations ready!", Toast.LENGTH_LONG).show()
+                        
+                        // Navigate to the main app (inside1Fragment)
+                        findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)
+                    } else {
+                        Toast.makeText(context, "Profile completed! Could not generate recommendations.", Toast.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)
+                    }
+                } catch (e: Exception) {
+                    Toast.makeText(context, "Profile completed! Service error: ${e.message}", Toast.LENGTH_LONG).show()
+                    findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)
+                }
+            }
             
         } catch (e: NumberFormatException) {
             Toast.makeText(context, "Please enter valid numbers for age, height, and weight", Toast.LENGTH_SHORT).show()
@@ -200,6 +228,7 @@ class Preference3Fragment : Fragment() {
     
     override fun onDestroyView() {
         super.onDestroyView()
+        coroutineScope.cancel()
         _binding = null
     }
 }

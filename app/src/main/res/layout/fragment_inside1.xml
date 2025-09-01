@@ -167,92 +167,114 @@
                 app:cornerRadius="24dp" />
 
             <!-- Recommended For You Section -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recommended For You"
-                android:textColor="@color/text_primary"
-                android:textSize="20sp"
-                android:fontFamily="@font/inter_bold"
-                android:textStyle="bold"
-                android:layout_marginBottom="16dp"
-                android:layout_marginStart="4dp" />
-
             <LinearLayout
+                android:id="@+id/recommendations_section"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                            android:layout_marginEnd="20dp">
+                android:orientation="vertical">
 
-                <!-- Morning Flow -->
-                <LinearLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="8dp">
+                    android:text="Recommended For You"
+                    android:textColor="@color/text_primary"
+                    android:textSize="20sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginStart="4dp" />
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_weight="1"
-                        android:src="@drawable/morning_flow_yoga"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/rounded_image_background"
-                        android:minHeight="120dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Morning Flow"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/inter_semibold"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="15 min"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/inter_regular" />
-
-                </LinearLayout>
-
-                <!-- Evening Relaxation -->
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp">
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="20dp">
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="0dp"
+                    <!-- First Recommendation -->
+                    <LinearLayout
+                        android:id="@+id/card_recommendation1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:src="@drawable/evening_relaxation_yoga"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/rounded_image_background"
-                        android:minHeight="120dp" />
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/neumorphic_card_background"
+                        android:padding="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Relaxation"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/inter_semibold"
-                        android:textStyle="bold" />
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/morning_flow_yoga"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/rounded_image_background"
+                            android:minHeight="120dp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/tv_recommendation1_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Morning Flow"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation1_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="15 min"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/inter_regular" />
+
+                    </LinearLayout>
+
+                    <!-- Second Recommendation -->
+                    <LinearLayout
+                        android:id="@+id/card_recommendation2"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="20 min"
-                        android:textColor="@color/text_secondary"
-                        android:textSize="14sp"
-                        android:fontFamily="@font/inter_regular" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/neumorphic_card_background"
+                        android:padding="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/evening_relaxation_yoga"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/rounded_image_background"
+                            android:minHeight="120dp" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation2_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Relaxation"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation2_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="20 min"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/inter_regular" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

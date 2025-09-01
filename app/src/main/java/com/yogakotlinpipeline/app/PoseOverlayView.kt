@@ -6,6 +6,11 @@ import android.util.AttributeSet
 import android.view.View
 import com.google.mlkit.vision.pose.PoseLandmark
 
+// Data classes for pose feedback (same as in PoseCalibrationFragment)
+data class PoseThreshold(val minAngle: Float, val maxAngle: Float)
+data class JointFeedback(val angle: Float, val isCorrect: Boolean, val threshold: PoseThreshold)
+data class PoseFeedback(val jointFeedback: MutableMap<String, JointFeedback> = mutableMapOf())
+
 class PoseOverlayView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -13,14 +18,27 @@ class PoseOverlayView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val poseLandmarks = mutableListOf<PoseLandmark>()
+    // Raw camera buffer dimensions (before rotation compensation)
     private var imageWidth = 1
     private var imageHeight = 1
+    // Effective source dimensions used for mapping after rotation swap
+    private var srcWidth = 1f
+    private var srcHeight = 1f
+    // View (PreviewView) dimensions
     private var screenWidth = 1f
     private var screenHeight = 1f
+    // Camera properties
+    private var isFlipped = false
+    private var rotationDegrees = 0
+    // Derived mapping values (FILL_CENTER behavior)
+    private var scale = 1f
+    private var offsetX = 0f
+    private var offsetY = 0f
     
     // Paint settings for clear visibility
     private val landmarkPaint = Paint().apply {
-        color = Color.RED
+        // Use subtle neutral color for base landmarks to avoid visual clutter
+        color = Color.argb(140, 255, 255, 255) // semi‑transparent white
         style = Paint.Style.FILL
         isAntiAlias = true
     }
@@ -39,30 +57,111 @@ class PoseOverlayView @JvmOverloads constructor(
         imageHeight = height
         screenWidth = canvasWidth
         screenHeight = canvasHeight
+        // Recompute transform with current values
+        computeTransform()
         invalidate()
     }
+    
+    // Method to update pose with feedback (like in calibration.ipynb)
+    fun updatePoseWithFeedback(landmarks: List<PoseLandmark>, feedback: PoseFeedback?, thresholds: Map<String, PoseThreshold>) {
+        poseLandmarks.clear()
+        poseLandmarks.addAll(landmarks)
+        // Store feedback for drawing joint angles
+        this.feedback = feedback
+        this.thresholds = thresholds
+        invalidate()
+    }
+    
+    fun updateDimensions(previewWidth: Int, previewHeight: Int) {
+        screenWidth = previewWidth.toFloat()
+        screenHeight = previewHeight.toFloat()
+        computeTransform()
+        invalidate()
+    }
+
+    /**
+     * Provide camera/image metadata so we can align overlay exactly like ML Kit Examples.
+     * - [bufferWidth], [bufferHeight]: ImageProxy width/height
+     * - [rotationDeg]: imageInfo.rotationDegrees
+     * - [mirror]: true for front camera
+     */
+    fun setImageSourceInfo(bufferWidth: Int, bufferHeight: Int, rotationDeg: Int, mirror: Boolean) {
+        imageWidth = bufferWidth
+        imageHeight = bufferHeight
+        rotationDegrees = rotationDeg
+        isFlipped = mirror
+        computeTransform()
+        invalidate()
+    }
+
+    private fun computeTransform() {
+        // Effective source dimensions: swap when rotated 90/270
+        val rotated = (rotationDegrees % 180 != 0)
+        srcWidth = if (rotated) imageHeight.toFloat() else imageWidth.toFloat()
+        srcHeight = if (rotated) imageWidth.toFloat() else imageHeight.toFloat()
+
+        if (screenWidth <= 0f || screenHeight <= 0f || srcWidth <= 0f || srcHeight <= 0f) {
+            scale = 1f
+            offsetX = 0f
+            offsetY = 0f
+            return
+        }
+
+        // PreviewView default ScaleType is FILL_CENTER → use max scale and center-crop offsets
+        val scaleX = screenWidth / srcWidth
+        val scaleY = screenHeight / srcHeight
+        scale = maxOf(scaleX, scaleY)
+        offsetX = (screenWidth - srcWidth * scale) / 2f
+        offsetY = (screenHeight - srcHeight * scale) / 2f
+    }
+
+    private fun toSrcX(rawX: Float, rawY: Float): Float {
+        // Accept normalized or pixel inputs; normalize to source pixels
+        return if (rawX <= 1f && rawY <= 1f) rawX * srcWidth else rawX
+    }
+
+    private fun toSrcY(rawX: Float, rawY: Float): Float {
+        return if (rawX <= 1f && rawY <= 1f) rawY * srcHeight else rawY
+    }
+
+    private fun translateX(srcX: Float): Float {
+        val vx = offsetX + srcX * scale
+        return if (isFlipped) screenWidth - vx else vx
+    }
+
+    private fun translateY(srcY: Float): Float = offsetY + srcY * scale
+    
+    private var feedback: PoseFeedback? = null
+    private var thresholds: Map<String, PoseThreshold> = emptyMap()
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         
-        if (poseLandmarks.isEmpty() || imageWidth <= 0 || imageHeight <= 0) return
+        if (poseLandmarks.isEmpty()) return
         
-        // Use the exact same scaling approach as ML Kit Examples
-        val scaleX = screenWidth / imageWidth
-        val scaleY = screenHeight / imageHeight
-        
-        // Draw connections first (behind landmarks)
-        drawConnections(canvas, scaleX, scaleY)
+        // Keep screenWidth/Height up to date in case view size changed
+        if (screenWidth != width.toFloat() || screenHeight != height.toFloat()) {
+            screenWidth = width.toFloat()
+            screenHeight = height.toFloat()
+            computeTransform()
+        }
+
+        // Draw connections first (behind landmarks) using translate helpers
+        drawConnections(canvas)
         
         // Draw landmarks on top
         for (landmark in poseLandmarks) {
             try {
-                val adjustedX = landmark.position.x * scaleX
-                val adjustedY = landmark.position.y * scaleY
+                val rawX = landmark.position.x
+                val rawY = landmark.position.y
+                val sx = toSrcX(rawX, rawY)
+                val sy = toSrcY(rawX, rawY)
+                val adjustedX = translateX(sx)
+                val adjustedY = translateY(sy)
                 
                 // Check if coordinates are within screen bounds
-                if (adjustedX >= 0 && adjustedX <= screenWidth && 
-                    adjustedY >= 0 && adjustedY <= screenHeight) {
+                if (adjustedX >= 0 && adjustedX <= width && 
+                    adjustedY >= 0 && adjustedY <= height) {
                     // Same radius as ML Kit Examples (8f)
                     canvas.drawCircle(adjustedX, adjustedY, 8f, landmarkPaint)
                 }
@@ -71,9 +170,12 @@ class PoseOverlayView @JvmOverloads constructor(
                 continue
             }
         }
+        
+        // Draw joint feedback (like in calibration.ipynb)
+        drawJointFeedback(canvas)
     }
     
-    private fun drawConnections(canvas: Canvas, scaleX: Float, scaleY: Float) {
+    private fun drawConnections(canvas: Canvas) {
         val connections = listOf(
             // Face connections (same as ML Kit Examples)
             PoseLandmark.LEFT_EYE to PoseLandmark.RIGHT_EYE,
@@ -123,21 +225,79 @@ class PoseOverlayView @JvmOverloads constructor(
                 val endLandmark = poseLandmarks.find { it.landmarkType == end }
                 
                 if (startLandmark != null && endLandmark != null) {
-                    val startX = startLandmark.position.x * scaleX
-                    val startY = startLandmark.position.y * scaleY
-                    val endX = endLandmark.position.x * scaleX
-                    val endY = endLandmark.position.y * scaleY
+                    val srx = startLandmark.position.x
+                    val sry = startLandmark.position.y
+                    val erx = endLandmark.position.x
+                    val ery = endLandmark.position.y
+
+                    val sx = translateX(toSrcX(srx, sry))
+                    val sy = translateY(toSrcY(srx, sry))
+                    val ex = translateX(toSrcX(erx, ery))
+                    val ey = translateY(toSrcY(erx, ery))
                     
                     // Check if coordinates are within screen bounds
-                    if (startX >= 0 && startX <= screenWidth && startY >= 0 && startY <= screenHeight &&
-                        endX >= 0 && endX <= screenWidth && endY >= 0 && endY <= screenHeight) {
-                        canvas.drawLine(startX, startY, endX, endY, connectionPaint)
+                    if (sx >= 0 && sx <= width && sy >= 0 && sy <= height &&
+                        ex >= 0 && ex <= width && ey >= 0 && ey <= height) {
+                        canvas.drawLine(sx, sy, ex, ey, connectionPaint)
                     }
                 }
             } catch (e: Exception) {
                 // Skip this connection if there's an error
                 continue
             }
+        }
+    }
+    
+    private fun drawJointFeedback(canvas: Canvas) {
+        feedback?.jointFeedback?.forEach { entry ->
+            val (jointName, jointFeedback) = entry
+            val jointLandmark = getJointLandmark(jointName) ?: return@forEach
+            val landmark = poseLandmarks.find { it.landmarkType == jointLandmark } ?: return@forEach
+            
+            // Map landmark to view space using the same transform as connections
+            val rawX = landmark.position.x
+            val rawY = landmark.position.y
+            val sx = translateX(toSrcX(rawX, rawY))
+            val sy = translateY(toSrcY(rawX, rawY))
+            
+            // Check if coordinates are within screen bounds
+            if (sx >= 0 && sx <= width && sy >= 0 && sy <= height) {
+                // Draw circle at joint (like in calibration.ipynb)
+                val jointPaint = Paint().apply {
+                    style = Paint.Style.FILL
+                    color = if (jointFeedback.isCorrect) Color.GREEN else Color.RED
+                    isAntiAlias = true
+                }
+                canvas.drawCircle(sx, sy, 15f, jointPaint)
+                
+                // Draw angle text (like in calibration.ipynb)
+                val textPaint = Paint().apply {
+                    textSize = 30f
+                    color = if (jointFeedback.isCorrect) Color.GREEN else Color.RED
+                    isAntiAlias = true
+                    typeface = Typeface.DEFAULT_BOLD
+                }
+                // Clamp label inside the view
+                val tx = sx - 20f
+                val ty = sy - 20f
+                val clampedX = tx.coerceIn(8f, width - 8f)
+                val clampedY = ty.coerceIn(24f, height - 8f)
+                canvas.drawText("${jointFeedback.angle.toInt()}°", clampedX, clampedY, textPaint)
+            }
+        }
+    }
+    
+    private fun getJointLandmark(jointName: String): Int? {
+        return when (jointName) {
+            "left_shoulder_angle" -> PoseLandmark.LEFT_SHOULDER
+            "left_elbow_angle" -> PoseLandmark.LEFT_ELBOW
+            "right_shoulder_angle" -> PoseLandmark.RIGHT_SHOULDER
+            "right_elbow_angle" -> PoseLandmark.RIGHT_ELBOW
+            "left_hip_angle" -> PoseLandmark.LEFT_HIP
+            "left_knee_angle" -> PoseLandmark.LEFT_KNEE
+            "right_hip_angle" -> PoseLandmark.RIGHT_HIP
+            "right_knee_angle" -> PoseLandmark.RIGHT_KNEE
+            else -> null
         }
     }
 }
