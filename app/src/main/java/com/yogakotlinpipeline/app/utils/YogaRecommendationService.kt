@@ -38,10 +38,10 @@ class YogaRecommendationService(private val context: Context) {
     }
     
     /**
-     * Get top 3 recommendations for display on home screen
+     * Get top 4 recommendations for display on home screen
      */
     suspend fun getTopRecommendations(userProfile: UserProfile): List<YogaRecommendation> {
-        return getRecommendations(userProfile).take(3)
+        return getRecommendations(userProfile).take(4)
     }
     
     /**

@@ -38,12 +38,12 @@ class Inside4Fragment : Fragment() {
             findNavController().navigate(R.id.action_inside4Fragment_to_inside1Fragment)
         }
 
-        binding.btnFlows.setOnClickListener {
-            findNavController().navigate(R.id.action_inside4Fragment_to_inside3Fragment)
-        }
-
         binding.btnExplore.setOnClickListener {
             findNavController().navigate(R.id.action_inside4Fragment_to_inside2Fragment)
+        }
+        
+        binding.btnAi.setOnClickListener {
+            findNavController().navigate(R.id.action_inside4Fragment_to_inside3Fragment)
         }
 
         binding.btnProgress.setOnClickListener {

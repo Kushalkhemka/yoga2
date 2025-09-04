@@ -705,34 +705,6 @@
                     android:layout_marginTop="4dp" />
             </LinearLayout>
 
-            <!-- Flows -->
-            <LinearLayout
-                android:id="@+id/btn_flows"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
-
-                <ImageView
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_self_improvement"
-                    android:tint="@color/primary_700" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Flows"
-                    android:textSize="12sp"
-                    android:textColor="@color/primary_700"
-                    android:fontFamily="@font/inter_medium"
-                    android:layout_marginTop="4dp" />
-            </LinearLayout>
-
             <!-- Explore -->
             <LinearLayout
                 android:id="@+id/btn_explore"
@@ -748,13 +720,41 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_star"
+                    android:src="@drawable/ic_search"
                     android:tint="@color/primary_700" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Explore"
+                    android:textSize="12sp"
+                    android:textColor="@color/primary_700"
+                    android:fontFamily="@font/inter_medium"
+                    android:layout_marginTop="4dp" />
+            </LinearLayout>
+
+            <!-- AI -->
+            <LinearLayout
+                android:id="@+id/btn_ai"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_ai"
+                    android:tint="@color/primary_700" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AI"
                     android:textSize="12sp"
                     android:textColor="@color/primary_700"
                     android:fontFamily="@font/inter_medium"

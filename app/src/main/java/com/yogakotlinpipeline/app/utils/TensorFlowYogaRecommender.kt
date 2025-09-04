@@ -263,7 +263,7 @@ class TensorFlowYogaRecommender(private val context: Context) {
     }
     
     fun getTopRecommendations(userProfile: UserProfile): List<TFLiteYogaRecommendation> {
-        return getRecommendations(userProfile).take(3)
+        return getRecommendations(userProfile).take(4)
     }
     
     fun close() {

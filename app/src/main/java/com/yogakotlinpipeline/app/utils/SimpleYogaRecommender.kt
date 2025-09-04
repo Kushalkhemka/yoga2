@@ -286,6 +286,6 @@ class SimpleYogaRecommender(private val context: Context) {
     }
     
     fun getTopRecommendations(userProfile: UserProfile): List<YogaRecommendation> {
-        return getRecommendations(userProfile).take(3)
+        return getRecommendations(userProfile).take(4)
     }
 }

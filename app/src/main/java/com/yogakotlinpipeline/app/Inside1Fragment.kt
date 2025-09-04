@@ -41,8 +41,8 @@ class Inside1Fragment : Fragment() {
     private fun setupClickListeners() {
         // Start Yoga Session Button
         binding.btnStartSession.setOnClickListener {
-            // Navigate to pose detection camera screen
-            findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
+            // Navigate to explore section where user can find 13 asanas for free flow
+            findNavController().navigate(R.id.action_inside1Fragment_to_inside2Fragment)
         }
 
         // Notification Button
@@ -85,6 +85,11 @@ class Inside1Fragment : Fragment() {
         binding.btnExplore.setOnClickListener {
             // Navigate to explore screen (inside2)
             findNavController().navigate(R.id.action_inside1Fragment_to_inside2Fragment)
+        }
+        
+        binding.btnAi.setOnClickListener {
+            // Navigate to AI screen (inside3)
+            findNavController().navigate(R.id.action_inside1Fragment_to_inside3Fragment)
         }
 
         binding.btnProgress.setOnClickListener {
@@ -147,6 +152,20 @@ class Inside1Fragment : Fragment() {
                 binding.tvRecommendation2Duration.text = "${secondRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
             }
             
+            // Update the third recommendation if available
+            if (recommendations.size > 2) {
+                val thirdRecommendation = recommendations[2]
+                binding.tvRecommendation3Title.text = thirdRecommendation.name
+                binding.tvRecommendation3Duration.text = "${thirdRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
+            }
+            
+            // Update the fourth recommendation if available
+            if (recommendations.size > 3) {
+                val fourthRecommendation = recommendations[3]
+                binding.tvRecommendation4Title.text = fourthRecommendation.name
+                binding.tvRecommendation4Duration.text = "${fourthRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
+            }
+            
             // Show the recommendations section
             binding.recommendationsSection.visibility = android.view.View.VISIBLE
         } else {
@@ -160,6 +179,10 @@ class Inside1Fragment : Fragment() {
         binding.tvRecommendation1Duration.text = "15 min"
         binding.tvRecommendation2Title.text = "Relaxation"
         binding.tvRecommendation2Duration.text = "20 min"
+        binding.tvRecommendation3Title.text = "Flexibility"
+        binding.tvRecommendation3Duration.text = "25 min"
+        binding.tvRecommendation4Title.text = "Strength"
+        binding.tvRecommendation4Duration.text = "30 min"
         binding.recommendationsSection.visibility = android.view.View.VISIBLE
     }
 

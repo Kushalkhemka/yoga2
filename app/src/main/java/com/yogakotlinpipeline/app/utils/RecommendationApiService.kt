@@ -29,3 +29,4 @@ data class AsanaRecommendation(
     val benefits: String,
     val contraindications: String
 )
+

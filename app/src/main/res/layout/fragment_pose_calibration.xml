@@ -88,11 +88,21 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <!-- Asana Name Display -->
     <TextView
         android:id="@+id/tv_pose_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="80dp"
+        android:background="@drawable/rounded_background_dark"
+        android:fontFamily="@font/inter_bold"
+        android:padding="8dp"
+        android:text="Calibrating: Dandasana"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:alpha="0.9" />
 
     <!-- Hidden navigation buttons -->
     <LinearLayout

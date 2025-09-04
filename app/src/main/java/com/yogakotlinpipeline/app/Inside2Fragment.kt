@@ -58,12 +58,12 @@ class Inside2Fragment : Fragment() {
             findNavController().navigate(R.id.action_inside2Fragment_to_inside1Fragment)
         }
 
-        binding.btnFlows.setOnClickListener {
-            findNavController().navigate(R.id.action_inside2Fragment_to_inside3Fragment)
-        }
-
         binding.btnExplore.setOnClickListener {
             // Already on explore screen, do nothing
+        }
+        
+        binding.btnAi.setOnClickListener {
+            findNavController().navigate(R.id.action_inside2Fragment_to_inside3Fragment)
         }
 
         binding.btnProgress.setOnClickListener {

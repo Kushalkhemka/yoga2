@@ -51,7 +51,7 @@ object YogaAsanaDataProvider {
             name = "Warrior II Pose",
             sanskritName = "Virabhadrasana II",
             difficultyLevel = DifficultyLevel.INTERMEDIATE,
-            imageResource = "warrior_ii.xml", // Using existing drawable
+            imageResource = "warrior_ii_pose.png", // Updated with new image
             description = "A powerful standing pose that builds strength and stamina"
         ),
         YogaAsana(

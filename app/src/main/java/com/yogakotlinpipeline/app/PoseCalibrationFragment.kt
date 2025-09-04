@@ -34,10 +34,12 @@ class PoseCalibrationFragment : Fragment() {
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
     private var camera: Camera? = null
+    private var cameraProvider: ProcessCameraProvider? = null
     
     private lateinit var poseDetector: PoseDetector
     private var poseName: String = ""
     private var poseThresholds: Map<String, PoseThreshold> = emptyMap()
+    private var lensFacing = CameraSelector.LENS_FACING_BACK
     
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
@@ -56,8 +58,12 @@ class PoseCalibrationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
-        // Get pose name from arguments
+        // Get pose name from arguments and normalize to match CSV entries
         poseName = arguments?.getString("pose_name") ?: "Dandasana"
+        poseName = normalizePoseName(poseName)
+        
+        // Update the pose title display
+        binding.tvPoseTitle.text = "Calibrating: $poseName"
         
         // Initialize pose detector
         initializePoseDetector()
@@ -77,6 +83,10 @@ class PoseCalibrationFragment : Fragment() {
         // Set up click listeners
         binding.btnBack.setOnClickListener {
             findNavController().navigateUp()
+        }
+        
+        binding.btnCameraSwitch.setOnClickListener {
+            switchCamera()
         }
         
         // Initialize camera executor
@@ -106,10 +116,12 @@ class PoseCalibrationFragment : Fragment() {
                 }
                 
                 val parts = line.split(",")
-                if (parts.size >= 6 && parts[0] == poseName) {
+                // CSV header: pose,joint,mean,std,learned_multiplier,min_angle,max_angle
+                // We must read min_angle at index 5 and max_angle at index 6
+                if (parts.size >= 7 && parts[0] == poseName) {
                     val joint = parts[1]
-                    val minAngle = parts[4].toFloatOrNull() ?: 0f
-                    val maxAngle = parts[5].toFloatOrNull() ?: 180f
+                    val minAngle = parts[5].toFloatOrNull() ?: 0f
+                    val maxAngle = parts[6].toFloatOrNull() ?: 180f
                     
                     thresholds[joint] = PoseThreshold(minAngle, maxAngle)
                 }
@@ -123,52 +135,81 @@ class PoseCalibrationFragment : Fragment() {
             Toast.makeText(context, "Error loading pose thresholds: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun normalizePoseName(input: String): String {
+        return when (input.trim()) {
+            "Naukasana", "Naukasan", "Boat", "Boat Pose", "Boat pose" -> "Boat pose"
+            // Add more aliases here if needed in future
+            else -> input.trim()
+        }
+    }
     
     private fun startCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
         
         cameraProviderFuture.addListener({
-            val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
-            
-            val preview = Preview.Builder().build()
-            
-            imageCapture = ImageCapture.Builder()
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
-                .build()
-            
-            val imageAnalyzer = ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-                .also {
-                    it.setAnalyzer(cameraExecutor, PoseAnalyzer())
-                }
-            
             try {
-                cameraProvider.unbindAll()
-                
-                // Start with back camera to match ML Kit Examples
-                camera = cameraProvider.bindToLifecycle(
-                    this,
-                    CameraSelector.DEFAULT_BACK_CAMERA,
-                    preview,
-                    imageCapture,
-                    imageAnalyzer
-                )
-                
-                preview.setSurfaceProvider(binding.viewFinder.surfaceProvider)
-                
-                // Update overlay with view size when available
-                binding.viewFinder.post {
-                    binding.poseOverlayView.updateDimensions(
-                        binding.viewFinder.width,
-                        binding.viewFinder.height
-                    )
-                }
-                
+                cameraProvider = cameraProviderFuture.get()
+                bindCameraUseCases()
             } catch (exc: Exception) {
                 Toast.makeText(context, "Camera binding failed: ${exc.message}", Toast.LENGTH_SHORT).show()
             }
         }, ContextCompat.getMainExecutor(requireContext()))
+    }
+    
+    private fun bindCameraUseCases() {
+        val cameraProvider = cameraProvider ?: return
+        
+        val preview = Preview.Builder().build()
+        
+        imageCapture = ImageCapture.Builder()
+            .setCaptureMode(ImageCapture.CAPTURE_MODE_MINIMIZE_LATENCY)
+            .build()
+        
+        val imageAnalyzer = ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+            .also {
+                it.setAnalyzer(cameraExecutor, PoseAnalyzer())
+            }
+        
+        val cameraSelector = CameraSelector.Builder()
+            .requireLensFacing(lensFacing)
+            .build()
+        
+        try {
+            cameraProvider.unbindAll()
+            
+            camera = cameraProvider.bindToLifecycle(
+                this,
+                cameraSelector,
+                preview,
+                imageCapture,
+                imageAnalyzer
+            )
+            
+            preview.setSurfaceProvider(binding.viewFinder.surfaceProvider)
+            
+            // Update overlay with view size when available
+            binding.viewFinder.post {
+                binding.poseOverlayView.updateDimensions(
+                    binding.viewFinder.width,
+                    binding.viewFinder.height
+                )
+            }
+            
+        } catch (exc: Exception) {
+            Toast.makeText(context, "Camera binding failed: ${exc.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun switchCamera() {
+        lensFacing = if (lensFacing == CameraSelector.LENS_FACING_BACK) {
+            CameraSelector.LENS_FACING_FRONT
+        } else {
+            CameraSelector.LENS_FACING_BACK
+        }
+        bindCameraUseCases()
     }
     
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
@@ -222,11 +263,15 @@ class PoseCalibrationFragment : Fragment() {
         val landmarks = pose.allPoseLandmarks
         
         if (landmarks.isNotEmpty()) {
+            if (poseThresholds.isEmpty()) {
+                // Quick diagnostic if thresholds didn't load for this pose
+                android.util.Log.w("PoseCalibration", "No thresholds loaded for pose '$poseName'")
+            }
             // Provide camera/image info to overlay so coordinates map like ML Kit Examples
             val bufferWidth = imageProxy.width
             val bufferHeight = imageProxy.height
             val rotationDeg = imageProxy.imageInfo.rotationDegrees
-            val isFront = false // back camera per current setup
+            val isFront = lensFacing == CameraSelector.LENS_FACING_FRONT
             binding.poseOverlayView.setImageSourceInfo(bufferWidth, bufferHeight, rotationDeg, isFront)
             binding.poseOverlayView.updatePoseLandmarks(
                 landmarks,

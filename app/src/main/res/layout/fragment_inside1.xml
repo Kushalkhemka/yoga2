@@ -184,11 +184,13 @@
                     android:layout_marginBottom="16dp"
                     android:layout_marginStart="4dp" />
 
+                <!-- First Row of Recommendations -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginEnd="20dp">
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="12dp">
 
                     <!-- First Recommendation -->
                     <LinearLayout
@@ -207,7 +209,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:src="@drawable/morning_flow_yoga"
+                            android:src="@drawable/recommendation_placeholder"
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_image_background"
                             android:minHeight="120dp" />
@@ -250,7 +252,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
                             android:layout_weight="1"
-                            android:src="@drawable/evening_relaxation_yoga"
+                            android:src="@drawable/recommendation_placeholder"
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_image_background"
                             android:minHeight="120dp" />
@@ -270,6 +272,101 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="20 min"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/inter_regular" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Second Row of Recommendations -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginEnd="20dp">
+
+                    <!-- Third Recommendation -->
+                    <LinearLayout
+                        android:id="@+id/card_recommendation3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/neumorphic_card_background"
+                        android:padding="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/recommendation_placeholder"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/rounded_image_background"
+                            android:minHeight="120dp" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation3_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Flexibility"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation3_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="25 min"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/inter_regular" />
+
+                    </LinearLayout>
+
+                    <!-- Fourth Recommendation -->
+                    <LinearLayout
+                        android:id="@+id/card_recommendation4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/neumorphic_card_background"
+                        android:padding="8dp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:layout_weight="1"
+                            android:src="@drawable/recommendation_placeholder"
+                            android:scaleType="centerCrop"
+                            android:background="@drawable/rounded_image_background"
+                            android:minHeight="120dp" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation4_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Strength"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/inter_semibold"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tv_recommendation4_duration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="30 min"
                             android:textColor="@color/text_secondary"
                             android:textSize="14sp"
                             android:fontFamily="@font/inter_regular" />
@@ -348,6 +445,33 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Explore"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter_medium" />
+
+            </LinearLayout>
+
+            <!-- AI -->
+            <LinearLayout
+                android:id="@+id/btn_ai"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginEnd="4dp">
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_ai"
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="AI" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="AI"
                     android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_medium" />

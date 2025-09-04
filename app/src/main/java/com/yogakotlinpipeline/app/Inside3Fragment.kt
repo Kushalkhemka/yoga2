@@ -53,7 +53,7 @@ class Inside3Fragment : Fragment() {
             findNavController().navigate(R.id.action_inside3Fragment_to_inside1Fragment)
         }
 
-        binding.btnFlows.setOnClickListener {
+        binding.btnExplore.setOnClickListener {
             // Navigate to explore screen (inside2)
             findNavController().navigate(R.id.action_inside3Fragment_to_inside2Fragment)
         }
