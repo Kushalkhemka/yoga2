@@ -30,16 +30,18 @@ class ExploreFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        Log.d("ExploreFragment", "=== onViewCreated called ===")
         setupRecyclerView()
         loadPoses()
+        Log.d("ExploreFragment", "=== Setup complete ===")
     }
     
     private fun setupRecyclerView() {
         poseAdapter = PoseAdapter { pose ->
-            // Navigate to pose calibration with pose information
+            // Navigate to YouTube video with pose information
             Log.d("ExploreFragment", "=== Pose clicked: ${pose.name} ===")
             Log.d("ExploreFragment", "Display name: ${pose.displayName}")
-            Log.d("ExploreFragment", "Attempting navigation to poseCalibrationFragment...")
+            Log.d("ExploreFragment", "Attempting navigation to youtubeVideoFragment...")
             
             val bundle = Bundle().apply {
                 putString("pose_name", pose.name)
@@ -51,7 +53,7 @@ class ExploreFragment : Fragment() {
             Log.d("ExploreFragment", "Bundle created with pose_name: ${bundle.getString("pose_name")}")
             
             try {
-                findNavController().navigate(R.id.action_exploreFragment_to_poseCalibrationFragment, bundle)
+                findNavController().navigate(R.id.action_exploreFragment_to_youtubeVideoFragment, bundle)
                 Log.d("ExploreFragment", "Navigation successful!")
             } catch (e: Exception) {
                 Log.e("ExploreFragment", "Navigation failed: ${e.message}", e)

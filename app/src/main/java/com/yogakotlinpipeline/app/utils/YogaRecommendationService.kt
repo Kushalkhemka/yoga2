@@ -29,7 +29,7 @@ class YogaRecommendationService(private val context: Context) {
         return try {
             Log.d(TAG, "Getting recommendations for user: ${userProfile.age} years old, level: ${userProfile.level}")
             withContext(Dispatchers.IO) {
-                networkService.getRecommendations(userProfile)
+                networkService.getRecommendations(userProfile, context.applicationContext)
             }
         } catch (e: Exception) {
             Log.e(TAG, "Error getting recommendations: ${e.message}", e)

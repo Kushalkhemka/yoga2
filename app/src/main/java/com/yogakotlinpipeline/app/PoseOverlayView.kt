@@ -18,6 +18,7 @@ class PoseOverlayView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val poseLandmarks = mutableListOf<PoseLandmark>()
+    private var smoothedCoordinates = mapOf<Int, Pair<Float, Float>>()
     // Raw camera buffer dimensions (before rotation compensation)
     private var imageWidth = 1
     private var imageHeight = 1
@@ -57,6 +58,20 @@ class PoseOverlayView @JvmOverloads constructor(
         imageHeight = height
         screenWidth = canvasWidth
         screenHeight = canvasHeight
+        // Recompute transform with current values
+        computeTransform()
+        invalidate()
+    }
+    
+    fun updatePoseLandmarksWithSmoothing(landmarks: List<PoseLandmark>, smoothedCoords: Map<Int, Pair<Float, Float>>, width: Int, height: Int, canvasWidth: Float, canvasHeight: Float) {
+        poseLandmarks.clear()
+        poseLandmarks.addAll(landmarks)
+        imageWidth = width
+        imageHeight = height
+        screenWidth = canvasWidth
+        screenHeight = canvasHeight
+        // Store smoothed coordinates for use in drawing
+        smoothedCoordinates = smoothedCoords
         // Recompute transform with current values
         computeTransform()
         invalidate()
@@ -152,8 +167,9 @@ class PoseOverlayView @JvmOverloads constructor(
         // Draw landmarks on top
         for (landmark in poseLandmarks) {
             try {
-                val rawX = landmark.position.x
-                val rawY = landmark.position.y
+                val smoothed = smoothedCoordinates[landmark.landmarkType]
+                val rawX = smoothed?.first ?: landmark.position.x
+                val rawY = smoothed?.second ?: landmark.position.y
                 val sx = toSrcX(rawX, rawY)
                 val sy = toSrcY(rawX, rawY)
                 val adjustedX = translateX(sx)
@@ -225,10 +241,12 @@ class PoseOverlayView @JvmOverloads constructor(
                 val endLandmark = poseLandmarks.find { it.landmarkType == end }
                 
                 if (startLandmark != null && endLandmark != null) {
-                    val srx = startLandmark.position.x
-                    val sry = startLandmark.position.y
-                    val erx = endLandmark.position.x
-                    val ery = endLandmark.position.y
+                    val startSmoothed = smoothedCoordinates[startLandmark.landmarkType]
+                    val endSmoothed = smoothedCoordinates[endLandmark.landmarkType]
+                    val srx = startSmoothed?.first ?: startLandmark.position.x
+                    val sry = startSmoothed?.second ?: startLandmark.position.y
+                    val erx = endSmoothed?.first ?: endLandmark.position.x
+                    val ery = endSmoothed?.second ?: endLandmark.position.y
 
                     val sx = translateX(toSrcX(srx, sry))
                     val sy = translateY(toSrcY(srx, sry))
@@ -255,8 +273,9 @@ class PoseOverlayView @JvmOverloads constructor(
             val landmark = poseLandmarks.find { it.landmarkType == jointLandmark } ?: return@forEach
             
             // Map landmark to view space using the same transform as connections
-            val rawX = landmark.position.x
-            val rawY = landmark.position.y
+            val smoothed = smoothedCoordinates[landmark.landmarkType]
+            val rawX = smoothed?.first ?: landmark.position.x
+            val rawY = smoothed?.second ?: landmark.position.y
             val sx = translateX(toSrcX(rawX, rawY))
             val sy = translateY(toSrcY(rawX, rawY))
             

@@ -77,18 +77,23 @@ class Inside2Fragment : Fragment() {
 
     private fun setupRecyclerView() {
         asanaAdapter = YogaAsanaAdapter(requireContext(), currentAsanas) { asana ->
-            // Navigate to pose calibration with asana information
+            // Navigate to YouTube video flow with asana information
             val bundle = Bundle().apply {
-                putString("pose_name", asana.sanskritName) // Use sanskritName as pose_name
-                putString("pose_display_name", asana.name) // Use name as display name
+                putString("pose_name", asana.sanskritName)
+                putString("pose_display_name", asana.name)
                 putString("pose_description", asana.description)
                 putString("pose_difficulty", asana.difficultyLevel.name.lowercase().replaceFirstChar { it.uppercase() })
             }
-            
+
             try {
-                findNavController().navigate(R.id.action_inside2Fragment_to_poseCalibrationFragment, bundle)
+                findNavController().navigate(R.id.action_exploreFragment_to_youtubeVideoFragment, bundle)
             } catch (e: Exception) {
-                android.widget.Toast.makeText(context, "Navigation failed: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                // Fallback directly to the fragment id if action not resolved
+                try {
+                    findNavController().navigate(R.id.youtubeVideoFragment, bundle)
+                } catch (ex: Exception) {
+                    android.widget.Toast.makeText(context, "Navigation failed: ${ex.message}", android.widget.Toast.LENGTH_LONG).show()
+                }
             }
         }
         

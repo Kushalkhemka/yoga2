@@ -41,6 +41,10 @@ class PoseCalibrationFragment : Fragment() {
     private var poseThresholds: Map<String, PoseThreshold> = emptyMap()
     private var lensFacing = CameraSelector.LENS_FACING_BACK
     
+    // Smoothing variables
+    private val smoothingFactor = 0.6f // Higher = more smoothing, lower = more responsive
+    private val smoothedLandmarks = mutableMapOf<Int, Pair<Float, Float>>()
+    
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
@@ -263,6 +267,25 @@ class PoseCalibrationFragment : Fragment() {
         val landmarks = pose.allPoseLandmarks
         
         if (landmarks.isNotEmpty()) {
+            // Apply smoothing to landmark coordinates for display
+            landmarks.forEach { landmark ->
+                val landmarkType = landmark.landmarkType
+                val currentX = landmark.position.x
+                val currentY = landmark.position.y
+                
+                val smoothed = smoothedLandmarks[landmarkType]
+                if (smoothed != null) {
+                    val smoothedX = smoothed.first + smoothingFactor * (currentX - smoothed.first)
+                    val smoothedY = smoothed.second + smoothingFactor * (currentY - smoothed.second)
+                    smoothedLandmarks[landmarkType] = Pair(smoothedX, smoothedY)
+                } else {
+                    // First detection - initialize with current position
+                    smoothedLandmarks[landmarkType] = Pair(currentX, currentY)
+                }
+            }
+            
+            // Use original landmarks for processing (smoothing applied in overlay)
+            val landmarksToProcess = landmarks
             if (poseThresholds.isEmpty()) {
                 // Quick diagnostic if thresholds didn't load for this pose
                 android.util.Log.w("PoseCalibration", "No thresholds loaded for pose '$poseName'")
@@ -273,15 +296,16 @@ class PoseCalibrationFragment : Fragment() {
             val rotationDeg = imageProxy.imageInfo.rotationDegrees
             val isFront = lensFacing == CameraSelector.LENS_FACING_FRONT
             binding.poseOverlayView.setImageSourceInfo(bufferWidth, bufferHeight, rotationDeg, isFront)
-            binding.poseOverlayView.updatePoseLandmarks(
-                landmarks,
+            binding.poseOverlayView.updatePoseLandmarksWithSmoothing(
+                landmarksToProcess,
+                smoothedLandmarks,
                 bufferWidth,
                 bufferHeight,
                 binding.viewFinder.width.toFloat(),
                 binding.viewFinder.height.toFloat()
             )
             // Calculate angles and provide feedback
-            val feedback = calculatePoseFeedback(landmarks)
+            val feedback = calculatePoseFeedback(landmarksToProcess)
             
             // Update UI with feedback
             updateFeedbackUI(feedback)
@@ -306,8 +330,9 @@ class PoseCalibrationFragment : Fragment() {
         poseThresholds.forEach { (jointName, threshold) ->
             val angle = calculateJointAngle(jointName, landmarks)
             if (angle != null) {
-                val isCorrect = angle in threshold.minAngle..threshold.maxAngle
-                feedback.jointFeedback[jointName] = JointFeedback(angle, isCorrect, threshold)
+                val clamped = clampToPoseAngleDomain(threshold)
+                val isCorrect = angle in clamped.minAngle..clamped.maxAngle
+                feedback.jointFeedback[jointName] = JointFeedback(angle, isCorrect, clamped)
             }
         }
         
@@ -397,31 +422,33 @@ class PoseCalibrationFragment : Fragment() {
         val rightKnee = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_KNEE }
         val leftAnkle = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_ANKLE }
         val rightAnkle = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_ANKLE }
-        
-        if (leftKnee != null && rightKnee != null && leftAnkle != null && rightAnkle != null) {
+        val leftHip = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }
+        val rightHip = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }
+
+        if (leftKnee != null && rightKnee != null && leftAnkle != null && rightAnkle != null && leftHip != null && rightHip != null) {
             val leftKneeAngle = calculateAngle(
-                floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }!!.position.y),
+                floatArrayOf(leftHip.position.x, leftHip.position.y),
                 floatArrayOf(leftKnee.position.x, leftKnee.position.y),
                 floatArrayOf(leftAnkle.position.x, leftAnkle.position.y)
             )
-            
+
             val rightKneeAngle = calculateAngle(
-                floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }!!.position.y),
+                floatArrayOf(rightHip.position.x, rightHip.position.y),
                 floatArrayOf(rightKnee.position.x, rightKnee.position.y),
                 floatArrayOf(rightAnkle.position.x, rightAnkle.position.y)
             )
-            
+
             // Determine which knee should be bent
             if (leftKneeAngle < rightKneeAngle) {
                 val leftCorrect = leftKneeAngle in 85f..135f
                 val rightCorrect = rightKneeAngle in 165f..180f
-                
+
                 feedback.jointFeedback["left_knee_angle"] = JointFeedback(leftKneeAngle, leftCorrect, PoseThreshold(85f, 135f))
                 feedback.jointFeedback["right_knee_angle"] = JointFeedback(rightKneeAngle, rightCorrect, PoseThreshold(165f, 180f))
             } else {
                 val leftCorrect = leftKneeAngle in 165f..180f
                 val rightCorrect = rightKneeAngle in 85f..135f
-                
+
                 feedback.jointFeedback["left_knee_angle"] = JointFeedback(leftKneeAngle, leftCorrect, PoseThreshold(165f, 180f))
                 feedback.jointFeedback["right_knee_angle"] = JointFeedback(rightKneeAngle, rightCorrect, PoseThreshold(85f, 135f))
             }
@@ -429,44 +456,27 @@ class PoseCalibrationFragment : Fragment() {
     }
     
     private fun handleVrksasanaFeedback(landmarks: List<com.google.mlkit.vision.pose.PoseLandmark>, feedback: PoseFeedback) {
-        // Special logic for Vrksasana (Tree pose)
-        val leftAnkle = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_ANKLE }
-        val rightAnkle = landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_ANKLE }
+        // Use CSV thresholds for Vrksasana (Tree pose) instead of hardcoded values
+        // The CSV already contains the appropriate thresholds for both left and right knee angles
+        // regardless of which leg is raised, so we can use the standard threshold logic
         
-        if (leftAnkle != null && rightAnkle != null) {
-            // Determine which leg is raised based on ankle height
-            if (leftAnkle.position.y < rightAnkle.position.y) {
-                // Left leg is raised
-                val leftKneeAngle = calculateAngle(
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }!!.position.y),
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_KNEE }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_KNEE }!!.position.y),
-                    floatArrayOf(leftAnkle.position.x, leftAnkle.position.y)
-                )
-                
-                val rightKneeAngle = calculateAngle(
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }!!.position.y),
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_KNEE }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_KNEE }!!.position.y),
-                    floatArrayOf(rightAnkle.position.x, rightAnkle.position.y)
-                )
-                
-                feedback.jointFeedback["left_knee_angle"] = JointFeedback(leftKneeAngle, leftKneeAngle in 30f..100f, PoseThreshold(30f, 100f))
-                feedback.jointFeedback["right_knee_angle"] = JointFeedback(rightKneeAngle, rightKneeAngle in 165f..180f, PoseThreshold(165f, 180f))
-            } else {
-                // Right leg is raised
-                val leftKneeAngle = calculateAngle(
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_HIP }!!.position.y),
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_KNEE }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_KNEE }!!.position.y),
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_ANKLE }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.LEFT_ANKLE }!!.position.y)
-                )
-                
-                val rightKneeAngle = calculateAngle(
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_HIP }!!.position.y),
-                    floatArrayOf(landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_KNEE }!!.position.x, landmarks.find { it.landmarkType == com.google.mlkit.vision.pose.PoseLandmark.RIGHT_KNEE }!!.position.y),
-                    floatArrayOf(rightAnkle.position.x, rightAnkle.position.y)
-                )
-                
-                feedback.jointFeedback["left_knee_angle"] = JointFeedback(leftKneeAngle, leftKneeAngle in 165f..180f, PoseThreshold(165f, 180f))
-                feedback.jointFeedback["right_knee_angle"] = JointFeedback(rightKneeAngle, rightKneeAngle in 30f..100f, PoseThreshold(30f, 100f))
+        // Get thresholds from CSV
+        val leftKneeThreshold = poseThresholds["left_knee_angle"]
+        val rightKneeThreshold = poseThresholds["right_knee_angle"]
+        
+        if (leftKneeThreshold != null) {
+            val leftKneeAngle = calculateJointAngle("left_knee_angle", landmarks)
+            if (leftKneeAngle != null) {
+                val isCorrect = leftKneeAngle in leftKneeThreshold.minAngle..leftKneeThreshold.maxAngle
+                feedback.jointFeedback["left_knee_angle"] = JointFeedback(leftKneeAngle, isCorrect, leftKneeThreshold)
+            }
+        }
+        
+        if (rightKneeThreshold != null) {
+            val rightKneeAngle = calculateJointAngle("right_knee_angle", landmarks)
+            if (rightKneeAngle != null) {
+                val isCorrect = rightKneeAngle in rightKneeThreshold.minAngle..rightKneeThreshold.maxAngle
+                feedback.jointFeedback["right_knee_angle"] = JointFeedback(rightKneeAngle, isCorrect, rightKneeThreshold)
             }
         }
     }
@@ -476,13 +486,16 @@ class PoseCalibrationFragment : Fragment() {
         requireActivity().runOnUiThread {
             // Update feedback text
             val feedbackText = buildString {
-                appendLine("Pose: $poseName")
-                appendLine()
-                feedback.jointFeedback.forEach { (jointName, jointFeedback) ->
-                    val status = if (jointFeedback.isCorrect) "✅" else "❌"
-                    appendLine("$status $jointName: ${jointFeedback.angle.toInt()}°")
-                    if (!jointFeedback.isCorrect) {
-                        appendLine("   Target: ${jointFeedback.threshold.minAngle.toInt()}° - ${jointFeedback.threshold.maxAngle.toInt()}°")
+                val incorrectJoints = feedback.jointFeedback.filter { !it.value.isCorrect }
+                if (incorrectJoints.isEmpty()) {
+                    appendLine("✅ Perfect pose! All joints are aligned correctly.")
+                } else {
+                    appendLine("❌ Adjust these joints:")
+                    appendLine()
+                    incorrectJoints.forEach { (jointName, jointFeedback) ->
+                        appendLine("• ${humanJoint(jointName)}: ${jointFeedback.angle.toInt()}°")
+                        appendLine("  Tip: " + adviceFor(jointName, jointFeedback.angle, jointFeedback.threshold))
+                        appendLine()
                     }
                 }
             }
@@ -505,6 +518,64 @@ class PoseCalibrationFragment : Fragment() {
         }
     }
     
+    private fun adviceFor(jointName: String, angle: Float, rawThreshold: PoseThreshold): String {
+        val t = clampToPoseAngleDomain(rawThreshold)
+        if (angle < t.minAngle) {
+            val delta = (t.minAngle - angle).toInt()
+            return "${increaseVerb(jointName)} ${humanJoint(jointName)} by ~${delta}°" + hintSuffix(jointName, increase = true)
+        }
+        if (angle > t.maxAngle) {
+            val delta = (angle - t.maxAngle).toInt()
+            return "${decreaseVerb(jointName)} ${humanJoint(jointName)} by ~${delta}°" + hintSuffix(jointName, increase = false)
+        }
+        return "Good alignment"
+    }
+
+    private fun clampToPoseAngleDomain(t: PoseThreshold): PoseThreshold {
+        val min = t.minAngle.coerceIn(0f, 180f)
+        val max = t.maxAngle.coerceIn(0f, 180f)
+        return PoseThreshold(min, max)
+    }
+
+    private fun humanJoint(jointName: String): String {
+        val side = when {
+            jointName.startsWith("left_") -> "left "
+            jointName.startsWith("right_") -> "right "
+            else -> ""
+        }
+        val joint = when {
+            jointName.contains("knee") -> "knee"
+            jointName.contains("elbow") -> "elbow"
+            jointName.contains("shoulder") -> "shoulder"
+            jointName.contains("hip") -> "hip"
+            else -> "joint"
+        }
+        return side + joint
+    }
+
+    private fun increaseVerb(jointName: String): String {
+        return when {
+            jointName.contains("knee") || jointName.contains("elbow") -> "Straighten"
+            else -> "Increase"
+        }
+    }
+
+    private fun decreaseVerb(jointName: String): String {
+        return when {
+            jointName.contains("knee") || jointName.contains("elbow") -> "Bend"
+            else -> "Decrease"
+        }
+    }
+
+    private fun hintSuffix(jointName: String, increase: Boolean): String {
+        return when {
+            jointName.contains("shoulder") && increase -> " (lift arm up)"
+            jointName.contains("shoulder") && !increase -> " (lower arm)"
+            jointName.contains("hip") && increase -> " (open hip)"
+            jointName.contains("hip") && !increase -> " (close hip)"
+            else -> ""
+        }
+    }
     data class PoseThreshold(val minAngle: Float, val maxAngle: Float)
     data class JointFeedback(val angle: Float, val isCorrect: Boolean, val threshold: PoseThreshold)
     data class PoseFeedback(val jointFeedback: MutableMap<String, JointFeedback> = mutableMapOf())

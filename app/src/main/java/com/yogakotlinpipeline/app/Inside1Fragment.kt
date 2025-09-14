@@ -5,19 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import android.util.Log
+import android.widget.TextView
+import com.yogakotlinpipeline.app.utils.NetworkService
+import com.yogakotlinpipeline.app.utils.UserProfile
+import com.yogakotlinpipeline.app.utils.RecommendationCacheStore
 import androidx.navigation.fragment.findNavController
 import com.yogakotlinpipeline.app.databinding.FragmentInside1Binding
 import com.yogakotlinpipeline.app.utils.LoginCache
-import com.yogakotlinpipeline.app.utils.YogaRecommendationService
-import kotlinx.coroutines.*
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Inside1Fragment : Fragment() {
 
     private var _binding: FragmentInside1Binding? = null
     private val binding get() = _binding!!
-    private lateinit var loginCache: LoginCache
-    private lateinit var yogaRecommendationService: YogaRecommendationService
-    private val coroutineScope = CoroutineScope(Dispatchers.Main + Job())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,51 +34,20 @@ class Inside1Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
-        loginCache = LoginCache.getInstance(requireContext())
-        yogaRecommendationService = YogaRecommendationService(requireContext())
-        
         setupClickListeners()
-        loadRecommendedPoses()
+        populateHomeRecommendations()
     }
 
     private fun setupClickListeners() {
         // Start Yoga Session Button
         binding.btnStartSession.setOnClickListener {
-            // Navigate to explore section where user can find 13 asanas for free flow
-            findNavController().navigate(R.id.action_inside1Fragment_to_inside2Fragment)
+            // Navigate to pose detection camera screen
+            findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
         }
 
         // Notification Button
         binding.btnNotifications.setOnClickListener {
             android.widget.Toast.makeText(context, "Notifications", android.widget.Toast.LENGTH_SHORT).show()
-        }
-
-        // Recommendation Card Click Listeners
-        binding.cardRecommendation1.setOnClickListener {
-            val recommendations = loginCache.getRecommendations()
-            if (recommendations.isNotEmpty()) {
-                val asanaName = recommendations[0].name
-                android.widget.Toast.makeText(context, "Starting: $asanaName", android.widget.Toast.LENGTH_SHORT).show()
-                // Navigate to pose detection with the selected asana
-                findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
-            } else {
-                android.widget.Toast.makeText(context, "Starting: Morning Flow", android.widget.Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
-            }
-        }
-
-        binding.cardRecommendation2.setOnClickListener {
-            val recommendations = loginCache.getRecommendations()
-            if (recommendations.size > 1) {
-                val asanaName = recommendations[1].name
-                android.widget.Toast.makeText(context, "Starting: $asanaName", android.widget.Toast.LENGTH_SHORT).show()
-                // Navigate to pose detection with the selected asana
-                findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
-            } else {
-                android.widget.Toast.makeText(context, "Starting: Relaxation", android.widget.Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
-            }
         }
 
         // Footer Navigation
@@ -83,12 +56,12 @@ class Inside1Fragment : Fragment() {
         }
 
         binding.btnExplore.setOnClickListener {
-            // Navigate to explore screen (inside2)
+            // Navigate to original Explore (inside2) with images and Sanskrit names
             findNavController().navigate(R.id.action_inside1Fragment_to_inside2Fragment)
         }
-        
+
         binding.btnAi.setOnClickListener {
-            // Navigate to AI screen (inside3)
+            // Navigate to AI section (inside3) for recommendations
             findNavController().navigate(R.id.action_inside1Fragment_to_inside3Fragment)
         }
 
@@ -98,98 +71,80 @@ class Inside1Fragment : Fragment() {
         }
 
         binding.btnProfile.setOnClickListener {
-            // Navigate to profile screen
-            findNavController().navigate(R.id.action_inside1Fragment_to_profileFragment)
+            // Navigate to profile or show profile options
+            android.widget.Toast.makeText(context, "Profile", android.widget.Toast.LENGTH_SHORT).show()
         }
-    }
-    
-    private fun loadRecommendedPoses() {
-        // Check if we have recent recommendations
-        if (loginCache.hasRecentRecommendations()) {
-            val recommendations = loginCache.getRecommendations()
-            displayRecommendations(recommendations)
-        } else {
-            // Generate new recommendations if profile is complete
-            val userProfile = loginCache.getUserProfile()
-            if (loginCache.isUserProfileComplete()) {
-                generateNewRecommendations(userProfile)
-            } else {
-                // Show placeholder or default recommendations
-                showDefaultRecommendations()
-            }
-        }
-    }
-    
-    private fun generateNewRecommendations(userProfile: com.yogakotlinpipeline.app.utils.UserProfile) {
-        coroutineScope.launch {
-            try {
-                val recommendations = yogaRecommendationService.getTopRecommendations(userProfile)
-                
-                if (recommendations.isNotEmpty()) {
-                    loginCache.saveRecommendations(recommendations)
-                    displayRecommendations(recommendations)
-                } else {
-                    showDefaultRecommendations()
-                }
-            } catch (e: Exception) {
-                android.util.Log.e("Inside1Fragment", "Error generating recommendations: ${e.message}", e)
-                showDefaultRecommendations()
-            }
-        }
-    }
-    
-    private fun displayRecommendations(recommendations: List<com.yogakotlinpipeline.app.utils.YogaRecommendation>) {
-        if (recommendations.isNotEmpty()) {
-            // Update the first recommendation
-            val firstRecommendation = recommendations[0]
-            binding.tvRecommendation1Title.text = firstRecommendation.name
-            binding.tvRecommendation1Duration.text = "${firstRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
-            
-            // Update the second recommendation if available
-            if (recommendations.size > 1) {
-                val secondRecommendation = recommendations[1]
-                binding.tvRecommendation2Title.text = secondRecommendation.name
-                binding.tvRecommendation2Duration.text = "${secondRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
-            }
-            
-            // Update the third recommendation if available
-            if (recommendations.size > 2) {
-                val thirdRecommendation = recommendations[2]
-                binding.tvRecommendation3Title.text = thirdRecommendation.name
-                binding.tvRecommendation3Duration.text = "${thirdRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
-            }
-            
-            // Update the fourth recommendation if available
-            if (recommendations.size > 3) {
-                val fourthRecommendation = recommendations[3]
-                binding.tvRecommendation4Title.text = fourthRecommendation.name
-                binding.tvRecommendation4Duration.text = "${fourthRecommendation.level.replaceFirstChar { it.uppercase() }} Level"
-            }
-            
-            // Show the recommendations section
-            binding.recommendationsSection.visibility = android.view.View.VISIBLE
-        } else {
-            showDefaultRecommendations()
-        }
-    }
-    
-    private fun showDefaultRecommendations() {
-        // Show default recommendations
-        binding.tvRecommendation1Title.text = "Morning Flow"
-        binding.tvRecommendation1Duration.text = "15 min"
-        binding.tvRecommendation2Title.text = "Relaxation"
-        binding.tvRecommendation2Duration.text = "20 min"
-        binding.tvRecommendation3Title.text = "Flexibility"
-        binding.tvRecommendation3Duration.text = "25 min"
-        binding.tvRecommendation4Title.text = "Strength"
-        binding.tvRecommendation4Duration.text = "30 min"
-        binding.recommendationsSection.visibility = android.view.View.VISIBLE
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        coroutineScope.cancel()
         _binding = null
+    }
+
+    private fun populateHomeRecommendations() {
+        try {
+            val appContext = requireContext().applicationContext
+            // Prefer saved user profile; fallback to sample if incomplete
+            val loginCache = LoginCache.getInstance(appContext)
+            val savedProfile = loginCache.getUserProfile()
+            val userProfile = if (savedProfile.age > 0 && savedProfile.height > 0 && savedProfile.weight > 0) {
+                savedProfile
+            } else {
+                UserProfile(
+                    age = 25,
+                    height = 170,
+                    weight = 65,
+                    level = "beginner",
+                    pregnant = false,
+                    problemAreas = listOf("back pain", "stress"),
+                    goals = listOf("flexibility", "stress relief"),
+                    mentalIssues = listOf("stress", "anxiety")
+                )
+            }
+
+            val networkService = NetworkService.getInstance()
+
+            // Launch background load so home can hydrate from cache or API
+            viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    // 1) In-memory cache
+                    val inMemory = networkService.getCachedRecommendations(userProfile)
+                    val cachedOrPersisted = inMemory ?: RecommendationCacheStore.loadIfFresh(appContext, userProfile)
+
+                    if (!cachedOrPersisted.isNullOrEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            if (_binding != null && isAdded) {
+                                setHomeRecommendationTitles(cachedOrPersisted.map { it.name })
+                            }
+                        }
+                    } else {
+                        // 2) Hit API which will also persist cache via NetworkService
+                        val fresh = networkService.getRecommendations(userProfile, context = appContext)
+                        withContext(Dispatchers.Main) {
+                            if (_binding != null && isAdded && fresh.isNotEmpty()) {
+                                setHomeRecommendationTitles(fresh.map { it.name })
+                            }
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.w("Inside1Fragment", "Background load failed: ${e.message}", e)
+                }
+            }
+        } catch (e: Exception) {
+            Log.w("Inside1Fragment", "Failed to populate home recommendations: ${e.message}", e)
+        }
+    }
+
+    private fun setHomeRecommendationTitles(titles: List<String>) {
+        val tv1: TextView = binding.tvRecommendation1Title
+        val tv2: TextView = binding.tvRecommendation2Title
+        val tv3: TextView = binding.tvRecommendation3Title
+        val tv4: TextView = binding.tvRecommendation4Title
+
+        if (titles.isNotEmpty()) tv1.text = titles.getOrNull(0) ?: tv1.text
+        if (titles.size > 1) tv2.text = titles.getOrNull(1) ?: tv2.text
+        if (titles.size > 2) tv3.text = titles.getOrNull(2) ?: tv3.text
+        if (titles.size > 3) tv4.text = titles.getOrNull(3) ?: tv4.text
     }
 }
 

@@ -222,7 +222,46 @@
             android:id="@+id/action_exploreFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
         <action
-            android:id="@+id/action_exploreFragment_to_poseCalibrationFragment"
+            android:id="@+id/action_exploreFragment_to_youtubeVideoFragment"
+            app:destination="@id/youtubeVideoFragment" />
+    </fragment>
+
+    <!-- YouTube Video Fragment -->
+    <fragment
+        android:id="@+id/youtubeVideoFragment"
+        android:name="com.yogakotlinpipeline.app.YoutubeVideoFragment"
+        android:label="YoutubeVideoFragment"
+        tools:layout="@layout/fragment_youtube_video">
+        <argument
+            android:name="pose_name"
+            app:argType="string"
+            android:defaultValue="Dandasana" />
+        <argument
+            android:name="pose_display_name"
+            app:argType="string"
+            android:defaultValue="Staff Pose" />
+        <argument
+            android:name="pose_description"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="pose_difficulty"
+            app:argType="string"
+            android:defaultValue="Beginner" />
+        <action
+            android:id="@+id/action_youtubeVideoFragment_to_inside1Fragment"
+            app:destination="@id/inside1Fragment" />
+        <action
+            android:id="@+id/action_youtubeVideoFragment_to_inside3Fragment"
+            app:destination="@id/inside3Fragment" />
+        <action
+            android:id="@+id/action_youtubeVideoFragment_to_inside4Fragment"
+            app:destination="@id/inside4Fragment" />
+        <action
+            android:id="@+id/action_youtubeVideoFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_youtubeVideoFragment_to_poseCalibrationFragment"
             app:destination="@id/poseCalibrationFragment" />
     </fragment>
 

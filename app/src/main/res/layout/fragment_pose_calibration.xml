@@ -68,12 +68,20 @@
         android:textStyle="bold"
         android:alpha="0.9" />
 
-    <!-- Hidden feedback for internal use -->
+    <!-- Visible rule-based feedback overlay -->
     <TextView
         android:id="@+id/tv_feedback"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone" />
+        android:layout_gravity="bottom"
+        android:layout_margin="12dp"
+        android:background="@drawable/rounded_background_dark"
+        android:padding="12dp"
+        android:textColor="@android:color/white"
+        android:textSize="14sp"
+        android:alpha="0.9"
+        android:maxLines="8"
+        android:ellipsize="end" />
 
     <!-- Hidden pose info elements -->
     <TextView

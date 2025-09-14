@@ -72,6 +72,15 @@
 
         </LinearLayout>
 
+        <!-- Loading indicator -->
+        <ProgressBar
+            android:id="@+id/progress_loading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:visibility="gone" />
+
         <!-- Recommended Poses List -->
         <ScrollView
             android:layout_width="match_parent"
@@ -81,212 +90,14 @@
             android:scrollbars="none">
 
             <LinearLayout
+                android:id="@+id/recommendations_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
                 android:spacing="16dp">
 
-                <!-- Mountain Pose -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/asana_card_background"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:src="@drawable/mountain_pose"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/asana_image_background"
-                        android:layout_marginEnd="16dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="BEGINNER"
-                            android:textColor="@color/primary_color"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.1"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mountain Pose"
-                            android:textColor="@color/text_primary"
-                            android:textSize="18sp"
-                            android:fontFamily="@font/inter_bold"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Grounding, improves posture"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
-
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/btn_play_mountain"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_play_circle"
-                        android:contentDescription="Play Mountain Pose"
-                        android:tint="@color/primary_color"
-                        android:scaleX="1.5"
-                        android:scaleY="1.5" />
-
-                </LinearLayout>
-
-                <!-- Warrior II Pose -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/asana_card_background"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:src="@drawable/warrior_ii"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/asana_image_background"
-                        android:layout_marginEnd="16dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="INTERMEDIATE"
-                            android:textColor="@color/primary_color"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.1"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Warrior II Pose"
-                            android:textColor="@color/text_primary"
-                            android:textSize="18sp"
-                            android:fontFamily="@font/inter_bold"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Strengthens legs, opens hips"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
-
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/btn_play_warrior"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_play_circle"
-                        android:contentDescription="Play Warrior II Pose"
-                        android:tint="@color/primary_color"
-                        android:scaleX="1.5"
-                        android:scaleY="1.5" />
-
-                </LinearLayout>
-
-                <!-- Crow Pose -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/asana_card_background"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="96dp"
-                        android:layout_height="96dp"
-                        android:src="@drawable/crow_pose"
-                        android:scaleType="centerCrop"
-                        android:background="@drawable/asana_image_background"
-                        android:layout_marginEnd="16dp" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ADVANCED"
-                            android:textColor="@color/primary_color"
-                            android:textSize="12sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold"
-                            android:letterSpacing="0.1"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Crow Pose"
-                            android:textColor="@color/text_primary"
-                            android:textSize="18sp"
-                            android:fontFamily="@font/inter_bold"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Builds arm strength, balance"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
-
-                    </LinearLayout>
-
-                    <ImageButton
-                        android:id="@+id/btn_play_crow"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_play_circle"
-                        android:contentDescription="Play Crow Pose"
-                        android:tint="@color/primary_color"
-                        android:scaleX="1.5"
-                        android:scaleY="1.5" />
-
-                </LinearLayout>
+                <!-- Dynamic recommendations will be added here -->
 
             </LinearLayout>
 
@@ -301,16 +112,16 @@
         android:layout_height="wrap_content"
         android:background="@drawable/footer_background_inside3"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:background="@drawable/footer_nav_background"
-            android:paddingHorizontal="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="4dp">
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
 
             <!-- Home -->
             <LinearLayout
@@ -319,7 +130,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -345,7 +157,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -364,7 +177,7 @@
 
             </LinearLayout>
 
-            <!-- AI (Active) -->
+            <!-- AI -->
             <LinearLayout
                 android:id="@+id/btn_ai"
                 android:layout_width="0dp"
@@ -372,9 +185,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/ai_tab_background"
-                android:paddingTop="8dp"
-                android:paddingBottom="4dp">
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
@@ -389,8 +200,7 @@
                     android:text="AI"
                     android:textColor="@color/primary_color"
                     android:textSize="12sp"
-                    android:fontFamily="@font/inter_bold"
-                    android:textStyle="bold" />
+                    android:fontFamily="@font/inter_medium" />
 
             </LinearLayout>
 
@@ -401,12 +211,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_monitoring"
+                    android:src="@drawable/ic_bar_chart"
                     android:tint="@color/text_secondary"
                     android:contentDescription="Progress" />
 
@@ -427,7 +238,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginStart="4dp">
 
                 <ImageView
                     android:layout_width="32dp"

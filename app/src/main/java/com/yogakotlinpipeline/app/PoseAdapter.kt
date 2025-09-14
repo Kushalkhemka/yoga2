@@ -52,6 +52,7 @@ class PoseAdapter(
             binding.tvSanskritName.text = pose.name
             
             binding.root.setOnClickListener {
+                android.util.Log.d("PoseAdapter", "=== Pose clicked: ${pose.name} ===")
                 onPoseClick(pose)
             }
         }

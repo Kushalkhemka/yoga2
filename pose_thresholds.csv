@@ -1,105 +1,105 @@
-pose,joint,mean,std,learned_multiplier,min_angle,max_angle
-Boat pose,left_shoulder_angle,56.5207,32.3454,2.2803,-17.2379,130.2792
-Boat pose,left_elbow_angle,154.1822,24.9325,3.2190,73.9240,234.4403
-Boat pose,right_shoulder_angle,58.6091,32.9627,2.0215,-8.0252,125.2433
-Boat pose,right_elbow_angle,155.5410,21.7807,4.7804,51.4199,259.6621
-Boat pose,left_hip_angle,66.8526,29.5257,1.6889,16.9866,116.7186
-Boat pose,left_knee_angle,155.6399,29.3058,3.1918,62.1028,249.1769
-Boat pose,right_hip_angle,66.2399,30.2175,1.8714,9.6915,122.7883
-Boat pose,right_knee_angle,153.9663,30.8351,2.3080,82.7995,225.1332
-Chakrasana,left_shoulder_angle,147.4463,19.3749,4.3500,63.1654,231.7273
-Chakrasana,left_elbow_angle,157.7185,21.8670,1.3712,127.7354,187.7016
-Chakrasana,right_shoulder_angle,146.8441,24.5635,4.1886,43.9569,249.7313
-Chakrasana,right_elbow_angle,159.0693,17.1684,2.1802,121.6391,196.4995
-Chakrasana,left_hip_angle,100.6502,26.0665,3.1687,18.0523,183.2482
-Chakrasana,left_knee_angle,135.3732,24.3404,1.6717,94.6836,176.0628
-Chakrasana,right_hip_angle,103.3711,27.7402,2.1874,42.6920,164.0503
-Chakrasana,right_knee_angle,137.3779,24.8485,1.4908,100.3332,174.4225
-Dandasana,left_shoulder_angle,51.5129,67.7080,1.0588,-20.1777,123.2035
-Dandasana,left_elbow_angle,158.4738,23.6477,0.8474,138.4354,178.5123
-Dandasana,right_shoulder_angle,50.1249,67.8067,1.0157,-18.7442,118.9941
-Dandasana,right_elbow_angle,157.8334,26.5958,0.7740,137.2488,178.4180
-Dandasana,left_hip_angle,105.1269,23.8458,1.6883,64.8685,145.3852
-Dandasana,left_knee_angle,164.4778,23.7533,0.6213,149.7190,179.2366
-Dandasana,right_hip_angle,104.4766,24.9517,1.6574,63.1210,145.8323
-Dandasana,right_knee_angle,166.4131,24.4762,0.5404,153.1862,179.6400
-Gomukhasana,left_shoulder_angle,55.6329,60.0353,2.0516,-67.5383,178.8041
-Gomukhasana,left_elbow_angle,103.4638,58.2403,1.5311,14.2927,192.6349
-Gomukhasana,right_shoulder_angle,83.9196,68.0982,1.4069,-11.8866,179.7259
-Gomukhasana,right_elbow_angle,90.9733,59.7272,1.4058,7.0075,174.9392
-Gomukhasana,left_hip_angle,113.6359,56.2775,1.2213,44.9039,182.3679
-Gomukhasana,left_knee_angle,85.8170,47.9048,1.5479,11.6636,159.9704
-Gomukhasana,right_hip_angle,105.0463,55.5993,1.4094,26.6871,183.4056
-Gomukhasana,right_knee_angle,88.2958,45.0414,1.4081,24.8734,151.7183
-King pigeon,left_shoulder_angle,114.4923,56.1658,1.7504,16.1820,212.8026
-King pigeon,left_elbow_angle,94.1527,50.1809,1.6429,11.7083,176.5971
-King pigeon,right_shoulder_angle,110.9673,60.2627,1.6610,10.8682,211.0665
-King pigeon,right_elbow_angle,96.9055,45.1762,1.7856,16.2368,177.5742
-King pigeon,left_hip_angle,110.3384,19.8649,2.5072,60.5339,160.1428
-King pigeon,left_knee_angle,50.4605,31.9781,2.3239,-23.8543,124.7753
-King pigeon,right_hip_angle,107.0430,26.6130,1.7797,59.6800,154.4061
-King pigeon,right_knee_angle,55.0623,37.7347,2.7073,-47.0973,157.2218
-Parsvottanasana,left_shoulder_angle,84.4498,48.4735,1.3653,18.2689,150.6308
-Parsvottanasana,left_elbow_angle,132.9532,50.7464,2.5384,4.1375,261.7689
-Parsvottanasana,right_shoulder_angle,85.0014,48.0535,1.5745,9.3405,160.6622
-Parsvottanasana,right_elbow_angle,135.1460,46.2710,2.3690,25.5309,244.7612
-Parsvottanasana,left_hip_angle,54.5336,36.3665,1.2977,7.3417,101.7254
-Parsvottanasana,left_knee_angle,169.0097,16.6463,0.9717,152.8339,185.1855
-Parsvottanasana,right_hip_angle,56.0656,37.5066,1.1267,13.8079,98.3233
-Parsvottanasana,right_knee_angle,168.7776,22.3023,1.5980,133.1394,204.4158
-Paschimottanasana,left_shoulder_angle,85.5913,41.2557,2.0114,2.6097,168.5728
-Paschimottanasana,left_elbow_angle,137.1871,32.8616,2.5292,54.0728,220.3014
-Paschimottanasana,right_shoulder_angle,83.1379,40.8833,1.9414,3.7684,162.5073
-Paschimottanasana,right_elbow_angle,134.3779,33.9587,1.8024,73.1703,195.5855
-Paschimottanasana,left_hip_angle,52.5713,36.3072,3.0251,-57.2633,162.4058
-Paschimottanasana,left_knee_angle,149.2110,45.5146,3.0389,10.8967,287.5253
-Paschimottanasana,right_hip_angle,54.8469,36.9538,2.7480,-46.7009,156.3947
-Paschimottanasana,right_knee_angle,147.5988,44.5723,2.8753,19.4402,275.7575
-Prasarita Padottanasana,left_shoulder_angle,102.1625,49.2964,1.8433,11.2947,193.0303
-Prasarita Padottanasana,left_elbow_angle,122.8869,41.0092,2.3411,26.8801,218.8937
-Prasarita Padottanasana,right_shoulder_angle,101.1232,48.4231,1.6486,21.2919,180.9544
-Prasarita Padottanasana,right_elbow_angle,121.5075,41.3068,1.8778,43.9425,199.0724
-Prasarita Padottanasana,left_hip_angle,27.0591,23.4476,0.8388,7.3902,46.7279
-Prasarita Padottanasana,left_knee_angle,171.4513,14.5901,0.6556,161.8854,181.0172
-Prasarita Padottanasana,right_hip_angle,27.6411,22.9855,0.9586,5.6076,49.6745
-Prasarita Padottanasana,right_knee_angle,171.0059,17.8649,0.4667,162.6680,179.3438
-Trikonsana,left_shoulder_angle,103.1367,23.5766,2.0135,55.6640,150.6095
-Trikonsana,left_elbow_angle,168.9938,15.3304,1.4758,146.3696,191.6179
-Trikonsana,right_shoulder_angle,101.7523,26.0168,2.0871,47.4523,156.0523
-Trikonsana,right_elbow_angle,168.3152,12.2836,1.3670,151.5239,185.1065
-Trikonsana,left_hip_angle,112.1859,44.7264,1.5320,43.6672,180.7046
-Trikonsana,left_knee_angle,173.3972,11.5454,1.5354,155.6700,191.1244
-Trikonsana,right_hip_angle,89.9185,47.4929,1.5941,14.2095,165.6276
-Trikonsana,right_knee_angle,173.5112,5.8460,2.4755,159.0395,187.9828
-Urdhva Prasarita eka padasana,left_shoulder_angle,114.8246,42.4679,1.3643,56.8859,172.7633
-Urdhva Prasarita eka padasana,left_elbow_angle,131.5226,38.2141,1.3813,78.7381,184.3072
-Urdhva Prasarita eka padasana,right_shoulder_angle,113.6137,44.3083,1.2915,56.3889,170.8385
-Urdhva Prasarita eka padasana,right_elbow_angle,130.5522,39.6921,1.6144,66.4715,194.6328
-Urdhva Prasarita eka padasana,left_hip_angle,100.1015,65.9068,1.4223,6.3631,193.8399
-Urdhva Prasarita eka padasana,left_knee_angle,159.0566,27.3495,1.6683,113.4290,204.6841
-Urdhva Prasarita eka padasana,right_hip_angle,88.0643,72.1504,1.2356,-1.0835,177.2120
-Urdhva Prasarita eka padasana,right_knee_angle,166.7598,14.2276,4.3570,104.7698,228.7498
-Vrksasana,left_shoulder_angle,92.1628,66.3970,1.2924,6.3501,177.9755
-Vrksasana,left_elbow_angle,96.9300,57.7710,1.3582,18.4641,175.3958
-Vrksasana,right_shoulder_angle,92.6113,67.2620,1.2556,8.1590,177.0636
-Vrksasana,right_elbow_angle,98.9172,58.0719,1.3497,20.5378,177.2965
-Vrksasana,left_hip_angle,150.1738,30.8300,1.6662,98.8047,201.5429
-Vrksasana,left_knee_angle,117.1766,70.0521,1.4474,15.7838,218.5694
-Vrksasana,right_hip_angle,140.1268,31.4895,1.3369,98.0294,182.2243
-Vrksasana,right_knee_angle,90.5494,70.2022,1.2677,1.5546,179.5441
-Warrior ii pose,left_shoulder_angle,95.2009,18.9193,2.1795,53.9660,136.4358
-Warrior ii pose,left_elbow_angle,168.8433,20.0794,1.2892,142.9572,194.7293
-Warrior ii pose,right_shoulder_angle,94.9529,22.2214,0.9876,73.0072,116.8986
-Warrior ii pose,right_elbow_angle,168.7244,19.6318,0.5925,157.0926,180.3562
-Warrior ii pose,left_hip_angle,121.8471,21.9126,1.9078,80.0429,163.6513
-Warrior ii pose,left_knee_angle,146.3350,34.2758,1.3264,100.8711,191.7988
-Warrior ii pose,right_hip_angle,120.4601,23.3441,2.3361,65.9251,174.9950
-Warrior ii pose,right_knee_angle,142.3094,31.8955,1.7393,86.8348,197.7841
-Yoganidrasana,left_shoulder_angle,43.6894,39.3770,2.0985,-38.9422,126.3210
-Yoganidrasana,left_elbow_angle,124.1146,41.7735,2.0840,37.0604,211.1688
-Yoganidrasana,right_shoulder_angle,42.6927,34.8546,2.7156,-51.9598,137.3451
-Yoganidrasana,right_elbow_angle,124.7384,46.0560,2.4243,13.0856,236.3912
-Yoganidrasana,left_hip_angle,28.9161,39.1111,2.2868,-60.5212,118.3535
-Yoganidrasana,left_knee_angle,127.0922,46.1690,2.5051,11.4350,242.7495
-Yoganidrasana,right_hip_angle,31.2428,33.9729,2.7130,-60.9252,123.4107
-Yoganidrasana,right_knee_angle,123.2783,44.2236,2.4485,14.9958,231.5607
+\pose,joint,mean,std,learned_multiplier,min_angle,max_angle
+Boat pose,left_shoulder_angle,56.5207,32.3454,2.0149,-8.6516,121.6929
+Boat pose,left_elbow_angle,154.1822,24.9325,3.0439,78.2892,230.0751
+Boat pose,right_shoulder_angle,58.6091,32.9627,1.8550,-2.5369,119.7550
+Boat pose,right_elbow_angle,155.5410,21.7807,4.2636,62.6774,248.4047
+Boat pose,left_hip_angle,66.8526,29.5257,1.6158,19.1452,114.5600
+Boat pose,left_knee_angle,155.6399,29.3058,2.8973,70.7335,240.5462
+Boat pose,right_hip_angle,66.2399,30.2175,1.7653,12.8966,119.5831
+Boat pose,right_knee_angle,153.9663,30.8351,2.1369,88.0746,219.8581
+Chakrasana,left_shoulder_angle,147.4463,19.3749,2.6662,95.7884,199.1043
+Chakrasana,left_elbow_angle,157.7185,21.8670,1.1889,131.7218,183.7152
+Chakrasana,right_shoulder_angle,146.8441,24.5635,3.3848,63.7023,229.9859
+Chakrasana,right_elbow_angle,159.0693,17.1684,1.5864,131.8327,186.3060
+Chakrasana,left_hip_angle,100.6502,26.0665,2.8769,25.6586,175.6419
+Chakrasana,left_knee_angle,135.3732,24.3404,1.6503,95.2032,175.5432
+Chakrasana,right_hip_angle,103.3711,27.7402,2.1443,43.8889,162.8534
+Chakrasana,right_knee_angle,137.3779,24.8485,1.4872,100.4220,174.3337
+Dandasana,left_shoulder_angle,51.5129,67.7080,0.9481,-12.6792,115.7051
+Dandasana,left_elbow_angle,158.4738,23.6477,0.8445,138.5041,178.4435
+Dandasana,right_shoulder_angle,50.1249,67.8067,0.8990,-10.8339,111.0838
+Dandasana,right_elbow_angle,157.8334,26.5958,0.7632,137.5351,178.1316
+Dandasana,left_hip_angle,105.1269,23.8458,1.5261,68.7363,141.5174
+Dandasana,left_knee_angle,164.4778,23.7533,0.6196,149.7602,179.1955
+Dandasana,right_hip_angle,104.4766,24.9517,1.4640,67.9462,141.0070
+Dandasana,right_knee_angle,166.4131,24.4762,0.5359,153.2958,179.5305
+Gomukhasana,left_shoulder_angle,55.6329,60.0353,2.0458,-67.1885,178.4544
+Gomukhasana,left_elbow_angle,103.4638,58.2403,1.5084,15.6143,191.3133
+Gomukhasana,right_shoulder_angle,83.9196,68.0982,1.4059,-11.8207,179.6599
+Gomukhasana,right_elbow_angle,90.9733,59.7272,1.3901,7.9441,174.0026
+Gomukhasana,left_hip_angle,113.6359,56.2775,1.1245,50.3508,176.9209
+Gomukhasana,left_knee_angle,85.8170,47.9048,1.5098,13.4909,158.1431
+Gomukhasana,right_hip_angle,105.0463,55.5993,1.3785,28.4053,181.6874
+Gomukhasana,right_knee_angle,88.2958,45.0414,1.3901,25.6833,150.9084
+King pigeon,left_shoulder_angle,114.4923,56.1658,1.6884,19.6629,209.3218
+King pigeon,left_elbow_angle,94.1527,50.1809,1.6080,13.4623,174.8431
+King pigeon,right_shoulder_angle,110.9673,60.2627,1.6579,11.0598,210.8749
+King pigeon,right_elbow_angle,96.9055,45.1762,1.7854,16.2485,177.5626
+King pigeon,left_hip_angle,110.3384,19.8649,2.1234,68.1581,152.5187
+King pigeon,left_knee_angle,50.4605,31.9781,2.1021,-16.7620,117.6830
+King pigeon,right_hip_angle,107.0430,26.6130,1.5493,65.8117,148.2744
+King pigeon,right_knee_angle,55.0623,37.7347,2.3320,-32.9341,143.0586
+Parsvottanasana,left_shoulder_angle,84.4498,48.4735,1.3588,18.5817,150.3179
+Parsvottanasana,left_elbow_angle,132.9532,50.7464,2.5348,4.3217,261.5847
+Parsvottanasana,right_shoulder_angle,85.0014,48.0535,1.5663,9.7343,160.2684
+Parsvottanasana,right_elbow_angle,135.1460,46.2710,2.3330,27.1980,243.0940
+Parsvottanasana,left_hip_angle,54.5336,36.3665,1.2692,8.3758,100.6914
+Parsvottanasana,left_knee_angle,169.0097,16.6463,0.8640,154.6275,183.3919
+Parsvottanasana,right_hip_angle,56.0656,37.5066,1.1263,13.8208,98.3104
+Parsvottanasana,right_knee_angle,168.7776,22.3023,1.2316,141.3110,196.2442
+Paschimottanasana,left_shoulder_angle,85.5913,41.2557,1.9808,3.8723,167.3103
+Paschimottanasana,left_elbow_angle,137.1871,32.8616,2.3386,60.3365,214.0377
+Paschimottanasana,right_shoulder_angle,83.1379,40.8833,1.8954,5.6463,160.6295
+Paschimottanasana,right_elbow_angle,134.3779,33.9587,1.5624,81.3192,187.4366
+Paschimottanasana,left_hip_angle,52.5713,36.3072,3.0107,-56.7384,161.8809
+Paschimottanasana,left_knee_angle,149.2110,45.5146,2.9937,12.9548,285.4671
+Paschimottanasana,right_hip_angle,54.8469,36.9538,2.7300,-46.0354,155.7292
+Paschimottanasana,right_knee_angle,147.5988,44.5723,2.7138,26.6390,268.5586
+Prasarita Padottanasana,left_shoulder_angle,102.1625,49.2964,1.8393,11.4930,192.8320
+Prasarita Padottanasana,left_elbow_angle,122.8869,41.0092,2.1029,36.6472,209.1267
+Prasarita Padottanasana,right_shoulder_angle,101.1232,48.4231,1.6376,21.8255,180.4208
+Prasarita Padottanasana,right_elbow_angle,121.5075,41.3068,1.8759,44.0188,198.9961
+Prasarita Padottanasana,left_hip_angle,27.0591,23.4476,0.8223,7.7773,46.3408
+Prasarita Padottanasana,left_knee_angle,171.4513,14.5901,0.6313,162.2409,180.6617
+Prasarita Padottanasana,right_hip_angle,27.6411,22.9855,0.9534,5.7275,49.5547
+Prasarita Padottanasana,right_knee_angle,171.0059,17.8649,0.4640,162.7161,179.2958
+Trikonsana,left_shoulder_angle,103.1367,23.5766,1.8758,58.9117,147.3618
+Trikonsana,left_elbow_angle,168.9938,15.3304,1.2927,149.1761,188.8114
+Trikonsana,right_shoulder_angle,101.7523,26.0168,1.8960,52.4258,151.0789
+Trikonsana,right_elbow_angle,168.3152,12.2836,1.2871,152.5055,184.1249
+Trikonsana,left_hip_angle,112.1859,44.7264,1.4979,45.1904,179.1814
+Trikonsana,left_knee_angle,173.3972,11.5454,1.3087,158.2877,188.5067
+Trikonsana,right_hip_angle,89.9185,47.4929,1.5206,17.6985,162.1386
+Trikonsana,right_knee_angle,173.5112,5.8460,2.3400,159.8314,187.1910
+Urdhva Prasarita eka padasana,left_shoulder_angle,114.8246,42.4679,1.3625,56.9640,172.6853
+Urdhva Prasarita eka padasana,left_elbow_angle,131.5226,38.2141,1.3689,79.2102,183.8351
+Urdhva Prasarita eka padasana,right_shoulder_angle,113.6137,44.3083,1.2768,57.0408,170.1865
+Urdhva Prasarita eka padasana,right_elbow_angle,130.5522,39.6921,1.6014,66.9904,194.1139
+Urdhva Prasarita eka padasana,left_hip_angle,100.1015,65.9068,1.4047,7.5190,192.6839
+Urdhva Prasarita eka padasana,left_knee_angle,159.0566,27.3495,1.4116,120.4500,197.6632
+Urdhva Prasarita eka padasana,right_hip_angle,88.0643,72.1504,1.2337,-0.9465,177.0751
+Urdhva Prasarita eka padasana,right_knee_angle,166.7598,14.2276,4.0775,108.7471,224.7726
+Vrksasana,left_shoulder_angle,92.1628,66.3970,1.2862,6.7644,177.5612
+Vrksasana,left_elbow_angle,96.9300,57.7710,1.3505,18.9115,174.9484
+Vrksasana,right_shoulder_angle,92.6113,67.2620,1.2541,8.2563,176.9663
+Vrksasana,right_elbow_angle,98.9172,58.0719,1.3449,20.8135,177.0208
+Vrksasana,left_hip_angle,150.1738,30.8300,1.6390,99.6447,200.7028
+Vrksasana,left_knee_angle,117.1766,70.0521,1.4410,16.2336,218.1196
+Vrksasana,right_hip_angle,140.1268,31.4895,1.3144,98.7379,181.5158
+Vrksasana,right_knee_angle,90.5494,70.2022,1.2668,1.6195,179.4792
+Warrior ii pose,left_shoulder_angle,95.2009,18.9193,1.7398,62.2851,128.1167
+Warrior ii pose,left_elbow_angle,168.8433,20.0794,1.1278,146.1970,191.4896
+Warrior ii pose,right_shoulder_angle,94.9529,22.2214,0.9579,73.6664,116.2394
+Warrior ii pose,right_elbow_angle,168.7244,19.6318,0.5844,157.2525,180.1963
+Warrior ii pose,left_hip_angle,121.8471,21.9126,1.9000,80.2132,163.4810
+Warrior ii pose,left_knee_angle,146.3350,34.2758,1.2946,101.9609,190.7090
+Warrior ii pose,right_hip_angle,120.4601,23.3441,2.2049,68.9891,171.9310
+Warrior ii pose,right_knee_angle,142.3094,31.8955,1.5478,92.9432,191.6757
+Yoganidrasana,left_shoulder_angle,43.6894,39.3770,2.0812,-38.2635,125.6423
+Yoganidrasana,left_elbow_angle,124.1146,41.7735,2.0075,40.2541,207.9751
+Yoganidrasana,right_shoulder_angle,42.6927,34.8546,2.6413,-49.3671,134.7524
+Yoganidrasana,right_elbow_angle,124.7384,46.0560,2.4073,13.8656,235.6113
+Yoganidrasana,left_hip_angle,28.9161,39.1111,2.0206,-50.1110,107.9433
+Yoganidrasana,left_knee_angle,127.0922,46.1690,2.4973,11.7954,242.3891
+Yoganidrasana,right_hip_angle,31.2428,33.9729,2.4571,-52.2305,114.7160
+Yoganidrasana,right_knee_angle,123.2783,44.2236,2.3838,17.8559,228.7007
