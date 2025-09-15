@@ -83,6 +83,9 @@
             android:id="@+id/action_preference3Fragment_to_inside1Fragment"
             app:destination="@id/inside1Fragment" />
         <action
+            android:id="@+id/action_preference3Fragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
             android:id="@+id/action_preference3Fragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
@@ -110,9 +113,6 @@
         <action
             android:id="@+id/action_inside1Fragment_to_poseDetectionFragment"
             app:destination="@id/poseDetectionFragment" />
-        <action
-            android:id="@+id/action_inside1Fragment_to_exploreFragment"
-            app:destination="@id/exploreFragment" />
     </fragment>
 
     <fragment
@@ -135,6 +135,9 @@
         <action
             android:id="@+id/action_inside2Fragment_to_poseCalibrationFragment"
             app:destination="@id/poseCalibrationFragment" />
+        <action
+            android:id="@+id/action_inside2Fragment_to_youtubeVideoFragment"
+            app:destination="@id/youtubeVideoFragment" />
     </fragment>
 
     <fragment
@@ -194,37 +197,15 @@
             android:id="@+id/action_profileFragment_to_inside4Fragment"
             app:destination="@id/inside4Fragment" />
         <action
+            android:id="@+id/action_profileFragment_to_preference1Fragment"
+            app:destination="@id/preference1Fragment" />
+        <action
             android:id="@+id/action_profileFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
-    <!-- Explore Fragment -->
-    <fragment
-        android:id="@+id/exploreFragment"
-        android:name="com.yogakotlinpipeline.app.ExploreFragment"
-        android:label="ExploreFragment"
-        tools:layout="@layout/fragment_explore">
-        <action
-            android:id="@+id/action_exploreFragment_to_inside1Fragment"
-            app:destination="@id/inside1Fragment" />
-        <action
-            android:id="@+id/action_exploreFragment_to_inside2Fragment"
-            app:destination="@id/inside2Fragment" />
-        <action
-            android:id="@+id/action_exploreFragment_to_inside3Fragment"
-            app:destination="@id/inside3Fragment" />
-        <action
-            android:id="@+id/action_exploreFragment_to_inside4Fragment"
-            app:destination="@id/inside4Fragment" />
-        <action
-            android:id="@+id/action_exploreFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_exploreFragment_to_youtubeVideoFragment"
-            app:destination="@id/youtubeVideoFragment" />
-    </fragment>
 
     <!-- YouTube Video Fragment -->
     <fragment

@@ -44,7 +44,11 @@ class Preference2Fragment : Fragment() {
         binding.btnContinue.setOnClickListener {
             saveGoals()
             // Navigate to next preference screen
-            findNavController().navigate(R.id.action_preference2Fragment_to_preference3Fragment)
+            // Pass through the from_profile parameter
+            val bundle = Bundle().apply {
+                putBoolean("from_profile", arguments?.getBoolean("from_profile", false) ?: false)
+            }
+            findNavController().navigate(R.id.action_preference2Fragment_to_preference3Fragment, bundle)
         }
     }
     

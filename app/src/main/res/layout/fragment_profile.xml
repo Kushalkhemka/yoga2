@@ -80,6 +80,7 @@
 
                 <!-- Profile Info -->
                 <TextView
+                    android:id="@+id/tv_profile_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sophia Johnson"
@@ -90,6 +91,7 @@
                     android:layout_marginBottom="8dp" />
 
                 <TextView
+                    android:id="@+id/tv_profile_level"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Yoga Enthusiast • Level: Intermediate"
@@ -115,6 +117,7 @@
                         android:padding="16dp">
 
                         <TextView
+                            android:id="@+id/tv_workouts_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="47"
@@ -143,6 +146,7 @@
                         android:padding="16dp">
 
                         <TextView
+                            android:id="@+id/tv_streak_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="7"
@@ -171,6 +175,7 @@
                         android:padding="16dp">
 
                         <TextView
+                            android:id="@+id/tv_total_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="23h"
@@ -235,6 +240,7 @@
                             android:layout_marginEnd="8dp" />
 
                         <TextView
+                            android:id="@+id/tv_age_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="28 years"
@@ -262,6 +268,7 @@
                             android:layout_marginEnd="8dp" />
 
                         <TextView
+                            android:id="@+id/tv_level_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Intermediate"
@@ -288,6 +295,7 @@
                             android:layout_marginEnd="8dp" />
 
                         <TextView
+                            android:id="@+id/tv_join_date_value"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="March 2024"
@@ -631,18 +639,17 @@
     <LinearLayout
         android:id="@+id/footer_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/footer_background_inside4"
+        android:layout_height="80dp"
+        android:background="@drawable/footer_background_inside1"
         android:orientation="vertical"
-        android:paddingTop="8dp"
-        android:paddingBottom="12dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingHorizontal="8dp">
+            android:gravity="center_vertical"
+            android:paddingHorizontal="20dp">
 
             <!-- Home -->
             <LinearLayout
@@ -658,14 +665,14 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_home"
-                    android:tint="@color/primary_700"
+                    android:tint="@color/text_secondary"
                     android:contentDescription="Home" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
-                    android:textColor="@color/primary_700"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_medium" />
 
@@ -685,14 +692,14 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_search"
-                    android:tint="@color/primary_700"
+                    android:tint="@color/text_secondary"
                     android:contentDescription="Explore" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Explore"
-                    android:textColor="@color/primary_700"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_medium" />
 
@@ -712,14 +719,14 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_ai"
-                    android:tint="@color/primary_700"
+                    android:tint="@color/text_secondary"
                     android:contentDescription="AI" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AI"
-                    android:textColor="@color/primary_700"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_medium" />
 
@@ -738,15 +745,15 @@
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_monitoring"
-                    android:tint="@color/primary_700"
+                    android:src="@drawable/ic_bar_chart"
+                    android:tint="@color/text_secondary"
                     android:contentDescription="Progress" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Progress"
-                    android:textColor="@color/primary_700"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_medium" />
 
@@ -766,14 +773,14 @@
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_person"
-                    android:tint="@color/primary_600"
+                    android:tint="@color/primary_color"
                     android:contentDescription="Profile" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Profile"
-                    android:textColor="@color/primary_600"
+                    android:textColor="@color/primary_color"
                     android:textSize="12sp"
                     android:fontFamily="@font/inter_bold"
                     android:textStyle="bold" />

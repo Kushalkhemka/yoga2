@@ -109,8 +109,8 @@
     <LinearLayout
         android:id="@+id/footer_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/footer_background_inside3"
+        android:layout_height="80dp"
+        android:background="@drawable/footer_background_inside1"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

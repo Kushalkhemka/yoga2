@@ -194,17 +194,18 @@ class Inside3Fragment : Fragment() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                bottomMargin = 48 // 16dp spacing
+                bottomMargin = 32 // 8dp spacing
             }
             orientation = LinearLayout.HORIZONTAL
-            setPadding(64, 64, 64, 64) // 16dp padding
+            setPadding(48, 48, 48, 48) // 12dp padding
             setBackgroundResource(R.drawable.asana_card_background)
+            gravity = android.view.Gravity.CENTER_VERTICAL
         }
         
         // Image
         val imageView = ImageView(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(384, 384).apply { // 96dp
-                marginEnd = 64 // 16dp margin
+            layoutParams = LinearLayout.LayoutParams(240, 240).apply { // 60dp
+                marginEnd = 48 // 12dp margin
             }
             setImageResource(R.drawable.recommendation_placeholder)
             scaleType = ImageView.ScaleType.CENTER_CROP
@@ -222,14 +223,14 @@ class Inside3Fragment : Fragment() {
         val levelText = TextView(requireContext()).apply {
             text = recommendation.level.uppercase()
             setTextColor(resources.getColor(R.color.primary_color, null))
-            textSize = 12f
+            textSize = 11f
             try {
                 typeface = resources.getFont(R.font.inter_semibold)
             } catch (e: Exception) {
                 Log.w("Inside3Fragment", "inter_semibold font not found, using default: ${e.message}")
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
             }
-            setPadding(0, 0, 0, 16) // 4dp bottom margin
+            setPadding(0, 0, 0, 8) // 2dp bottom margin
         }
         textLayout.addView(levelText)
         
@@ -237,14 +238,16 @@ class Inside3Fragment : Fragment() {
         val nameText = TextView(requireContext()).apply {
             text = recommendation.name
             setTextColor(resources.getColor(R.color.text_primary, null))
-            textSize = 18f
+            textSize = 16f
             try {
                 typeface = resources.getFont(R.font.inter_bold)
             } catch (e: Exception) {
                 Log.w("Inside3Fragment", "inter_bold font not found, using default: ${e.message}")
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
             }
-            setPadding(0, 0, 0, 16) // 4dp bottom margin
+            setPadding(0, 0, 0, 8) // 2dp bottom margin
+            maxLines = 2
+            ellipsize = android.text.TextUtils.TruncateAt.END
         }
         textLayout.addView(nameText)
         
@@ -252,35 +255,28 @@ class Inside3Fragment : Fragment() {
         val descText = TextView(requireContext()).apply {
             text = recommendation.benefits
             setTextColor(resources.getColor(R.color.text_secondary, null))
-            textSize = 14f
+            textSize = 13f
             try {
                 typeface = resources.getFont(R.font.inter_regular)
             } catch (e: Exception) {
                 Log.w("Inside3Fragment", "inter_regular font not found, using default: ${e.message}")
                 typeface = android.graphics.Typeface.DEFAULT
             }
+            maxLines = 3
+            ellipsize = android.text.TextUtils.TruncateAt.END
         }
         textLayout.addView(descText)
         
         cardLayout.addView(textLayout)
         
-        // Play button
+        // Play button - smaller and properly positioned
         val playButton = ImageButton(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            setImageResource(R.drawable.ic_play_circle)
-            // Use attribute correctly via setBackgroundResource requires a resource id.
-            // Fall back to transparent background if attribute id is not a valid resource.
-            try {
-                setBackgroundResource(android.R.drawable.list_selector_background)
-            } catch (e: Exception) {
-                setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            layoutParams = LinearLayout.LayoutParams(120, 120).apply { // 30dp
+                marginStart = 16 // 4dp margin
             }
-            setColorFilter(resources.getColor(R.color.primary_color, null))
-            scaleX = 1.5f
-            scaleY = 1.5f
+            setImageResource(R.drawable.ic_play_arrow)
+            setBackgroundResource(R.drawable.play_button_background)
+            setColorFilter(resources.getColor(R.color.white, null))
             setOnClickListener {
                 navigateToPoseCalibration(
                     recommendation.name.lowercase(),
@@ -301,17 +297,18 @@ class Inside3Fragment : Fragment() {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
             ).apply {
-                bottomMargin = 48 // 16dp spacing
+                bottomMargin = 32 // 8dp spacing
             }
             orientation = LinearLayout.HORIZONTAL
-            setPadding(64, 64, 64, 64) // 16dp padding
+            setPadding(48, 48, 48, 48) // 12dp padding
             setBackgroundResource(R.drawable.asana_card_background)
+            gravity = android.view.Gravity.CENTER_VERTICAL
         }
         
         // Image
         val imageView = ImageView(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(384, 384).apply { // 96dp
-                marginEnd = 64 // 16dp margin
+            layoutParams = LinearLayout.LayoutParams(240, 240).apply { // 60dp
+                marginEnd = 48 // 12dp margin
             }
             setImageResource(R.drawable.recommendation_placeholder)
             scaleType = ImageView.ScaleType.CENTER_CROP
@@ -329,14 +326,14 @@ class Inside3Fragment : Fragment() {
         val levelText = TextView(requireContext()).apply {
             text = level
             setTextColor(resources.getColor(R.color.primary_color, null))
-            textSize = 12f
+            textSize = 11f
             try {
                 typeface = resources.getFont(R.font.inter_semibold)
             } catch (e: Exception) {
                 Log.w("Inside3Fragment", "inter_semibold font not found, using default: ${e.message}")
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
             }
-            setPadding(0, 0, 0, 16) // 4dp bottom margin
+            setPadding(0, 0, 0, 8) // 2dp bottom margin
         }
         textLayout.addView(levelText)
         
@@ -344,14 +341,16 @@ class Inside3Fragment : Fragment() {
         val nameText = TextView(requireContext()).apply {
             text = name
             setTextColor(resources.getColor(R.color.text_primary, null))
-            textSize = 18f
+            textSize = 16f
             try {
                 typeface = resources.getFont(R.font.inter_bold)
             } catch (e: Exception) {
                 Log.w("Inside3Fragment", "inter_bold font not found, using default: ${e.message}")
                 typeface = android.graphics.Typeface.DEFAULT_BOLD
             }
-            setPadding(0, 0, 0, 16) // 4dp bottom margin
+            setPadding(0, 0, 0, 8) // 2dp bottom margin
+            maxLines = 2
+            ellipsize = android.text.TextUtils.TruncateAt.END
         }
         textLayout.addView(nameText)
         
@@ -359,33 +358,28 @@ class Inside3Fragment : Fragment() {
         val descText = TextView(requireContext()).apply {
             text = description
             setTextColor(resources.getColor(R.color.text_secondary, null))
-            textSize = 14f
+            textSize = 13f
             try {
                 typeface = resources.getFont(R.font.inter_regular)
             } catch (e: Exception) {
                 Log.w("Inside3Fragment", "inter_regular font not found, using default: ${e.message}")
                 typeface = android.graphics.Typeface.DEFAULT
             }
+            maxLines = 3
+            ellipsize = android.text.TextUtils.TruncateAt.END
         }
         textLayout.addView(descText)
         
         cardLayout.addView(textLayout)
         
-        // Play button
+        // Play button - smaller and properly positioned
         val playButton = ImageButton(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            setImageResource(R.drawable.ic_play_circle)
-            try {
-                setBackgroundResource(android.R.drawable.list_selector_background)
-            } catch (e: Exception) {
-                setBackgroundColor(android.graphics.Color.TRANSPARENT)
+            layoutParams = LinearLayout.LayoutParams(120, 120).apply { // 30dp
+                marginStart = 16 // 4dp margin
             }
-            setColorFilter(resources.getColor(R.color.primary_color, null))
-            scaleX = 1.5f
-            scaleY = 1.5f
+            setImageResource(R.drawable.ic_play_arrow)
+            setBackgroundResource(R.drawable.play_button_background)
+            setColorFilter(resources.getColor(R.color.white, null))
             setOnClickListener {
                 navigateToPoseCalibration(
                     name.lowercase(),

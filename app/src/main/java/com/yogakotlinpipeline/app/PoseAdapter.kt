@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yogakotlinpipeline.app.databinding.ItemPoseBinding
 
 class PoseAdapter(
-    private val onPoseClick: (ExploreFragment.Pose) -> Unit
-) : ListAdapter<ExploreFragment.Pose, PoseAdapter.PoseViewHolder>(PoseDiffCallback()) {
+    private val onPoseClick: (Pose) -> Unit
+) : ListAdapter<Pose, PoseAdapter.PoseViewHolder>(PoseDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PoseViewHolder {
         val binding = ItemPoseBinding.inflate(
@@ -27,10 +27,10 @@ class PoseAdapter(
 
     class PoseViewHolder(
         private val binding: ItemPoseBinding,
-        private val onPoseClick: (ExploreFragment.Pose) -> Unit
+        private val onPoseClick: (Pose) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(pose: ExploreFragment.Pose) {
+        fun bind(pose: Pose) {
             binding.tvPoseName.text = pose.displayName
             binding.tvPoseDescription.text = pose.description
             
@@ -58,12 +58,12 @@ class PoseAdapter(
         }
     }
 
-    private class PoseDiffCallback : DiffUtil.ItemCallback<ExploreFragment.Pose>() {
-        override fun areItemsTheSame(oldItem: ExploreFragment.Pose, newItem: ExploreFragment.Pose): Boolean {
+    private class PoseDiffCallback : DiffUtil.ItemCallback<Pose>() {
+        override fun areItemsTheSame(oldItem: Pose, newItem: Pose): Boolean {
             return oldItem.name == newItem.name
         }
 
-        override fun areContentsTheSame(oldItem: ExploreFragment.Pose, newItem: ExploreFragment.Pose): Boolean {
+        override fun areContentsTheSame(oldItem: Pose, newItem: Pose): Boolean {
             return oldItem == newItem
         }
     }

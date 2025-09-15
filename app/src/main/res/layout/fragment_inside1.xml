@@ -45,8 +45,9 @@
                         android:layout_height="56dp"
                         android:src="@drawable/amelia_avatar"
                         android:scaleType="centerCrop"
-                        android:background="@drawable/avatar_background"
-                        android:padding="2dp" />
+                        android:background="@drawable/circular_avatar_clip"
+                        android:clipToOutline="true"
+                        android:outlineProvider="background" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -147,6 +148,133 @@
 
             </LinearLayout>
 
+            <!-- Weekly Progress Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
+
+                <!-- Streak Card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/neumorphic_card_background"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_star"
+                        android:tint="@color/primary_color"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="7"
+                        android:textColor="@color/text_primary"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Day Streak"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/inter_medium"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Sessions This Week Card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/neumorphic_card_background"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_play_arrow"
+                        android:tint="@color/primary_color"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12"
+                        android:textColor="@color/text_primary"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sessions"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/inter_medium"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+                <!-- Total Time Card -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical"
+                    android:background="@drawable/neumorphic_card_background"
+                    android:padding="16dp"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_view_timeline"
+                        android:tint="@color/primary_color"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4.5h"
+                        android:textColor="@color/text_primary"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This Week"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="12sp"
+                        android:fontFamily="@font/inter_medium"
+                        android:gravity="center" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
             <!-- Start Yoga Session Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_start_session"
@@ -166,6 +294,60 @@
                 app:iconPadding="8dp"
                 app:cornerRadius="24dp" />
 
+            <!-- Today's Focus Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:orientation="vertical"
+                android:background="@drawable/neumorphic_card_background"
+                android:padding="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="12dp">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_star"
+                        android:tint="@color/primary_color"
+                        android:layout_marginEnd="8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Today's Focus"
+                        android:textColor="@color/text_primary"
+                        android:textSize="18sp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Flexibility &amp; Stress Relief"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_medium"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Focus on gentle stretches and breathing exercises to improve flexibility and reduce stress levels."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_regular"
+                    android:lineSpacingExtra="2dp" />
+
+            </LinearLayout>
+
             <!-- Recommended For You Section -->
             <LinearLayout
                 android:id="@+id/recommendations_section"
@@ -173,16 +355,30 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Recommended For You"
-                    android:textColor="@color/text_primary"
-                    android:textSize="20sp"
-                    android:fontFamily="@font/inter_bold"
-                    android:textStyle="bold"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginStart="4dp" />
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Recommended For You"
+                        android:textColor="@color/text_primary"
+                        android:textSize="20sp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:layout_marginStart="12dp"
+                        android:background="@color/neutral_200" />
+
+                </LinearLayout>
 
                 <!-- First Row of Recommendations -->
                 <LinearLayout
@@ -196,42 +392,54 @@
                     <LinearLayout
                         android:id="@+id/card_recommendation1"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="180dp"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/neumorphic_card_background"
-                        android:padding="8dp"
+                        android:padding="12dp"
                         android:clickable="true"
                         android:focusable="true">
 
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="120dp"
                             android:src="@drawable/recommendation_placeholder"
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_image_background"
-                            android:minHeight="120dp" />
+                            android:layout_marginBottom="8dp" />
 
-                        <TextView
-                            android:id="@+id/tv_recommendation1_title"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Morning Flow"
-                            android:textColor="@color/text_primary"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/tv_recommendation1_duration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="15 min"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
+                            <TextView
+                                android:id="@+id/tv_recommendation1_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Gomukhasana"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_semibold"
+                                android:textStyle="bold"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:lineSpacingExtra="2dp" />
+
+                            <TextView
+                                android:id="@+id/tv_recommendation1_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="15 min"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_regular"
+                                android:layout_marginTop="2dp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -239,42 +447,54 @@
                     <LinearLayout
                         android:id="@+id/card_recommendation2"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="180dp"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_marginStart="8dp"
                         android:background="@drawable/neumorphic_card_background"
-                        android:padding="8dp"
+                        android:padding="12dp"
                         android:clickable="true"
                         android:focusable="true">
 
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="120dp"
                             android:src="@drawable/recommendation_placeholder"
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_image_background"
-                            android:minHeight="120dp" />
+                            android:layout_marginBottom="8dp" />
 
-                        <TextView
-                            android:id="@+id/tv_recommendation2_title"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Relaxation"
-                            android:textColor="@color/text_primary"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/tv_recommendation2_duration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="20 min"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
+                            <TextView
+                                android:id="@+id/tv_recommendation2_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Parivrtta Janu Sirsasana"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_semibold"
+                                android:textStyle="bold"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:lineSpacingExtra="2dp" />
+
+                            <TextView
+                                android:id="@+id/tv_recommendation2_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="20 min"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_regular"
+                                android:layout_marginTop="2dp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -291,42 +511,54 @@
                     <LinearLayout
                         android:id="@+id/card_recommendation3"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="180dp"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_marginEnd="8dp"
                         android:background="@drawable/neumorphic_card_background"
-                        android:padding="8dp"
+                        android:padding="12dp"
                         android:clickable="true"
                         android:focusable="true">
 
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="120dp"
                             android:src="@drawable/recommendation_placeholder"
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_image_background"
-                            android:minHeight="120dp" />
+                            android:layout_marginBottom="8dp" />
 
-                        <TextView
-                            android:id="@+id/tv_recommendation3_title"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Flexibility"
-                            android:textColor="@color/text_primary"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/tv_recommendation3_duration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="25 min"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
+                            <TextView
+                                android:id="@+id/tv_recommendation3_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Parivrtta Upavistha Konasana"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_semibold"
+                                android:textStyle="bold"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:lineSpacingExtra="2dp" />
+
+                            <TextView
+                                android:id="@+id/tv_recommendation3_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="25 min"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_regular"
+                                android:layout_marginTop="2dp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -334,42 +566,54 @@
                     <LinearLayout
                         android:id="@+id/card_recommendation4"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="180dp"
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:layout_marginStart="8dp"
                         android:background="@drawable/neumorphic_card_background"
-                        android:padding="8dp"
+                        android:padding="12dp"
                         android:clickable="true"
                         android:focusable="true">
 
                         <ImageView
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
+                            android:layout_height="120dp"
                             android:src="@drawable/recommendation_placeholder"
                             android:scaleType="centerCrop"
                             android:background="@drawable/rounded_image_background"
-                            android:minHeight="120dp" />
+                            android:layout_marginBottom="8dp" />
 
-                        <TextView
-                            android:id="@+id/tv_recommendation4_title"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Strength"
-                            android:textColor="@color/text_primary"
-                            android:textSize="16sp"
-                            android:fontFamily="@font/inter_semibold"
-                            android:textStyle="bold" />
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
 
-                        <TextView
-                            android:id="@+id/tv_recommendation4_duration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="30 min"
-                            android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:fontFamily="@font/inter_regular" />
+                            <TextView
+                                android:id="@+id/tv_recommendation4_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Anantasana"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_semibold"
+                                android:textStyle="bold"
+                                android:maxLines="2"
+                                android:ellipsize="end"
+                                android:lineSpacingExtra="2dp" />
+
+                            <TextView
+                                android:id="@+id/tv_recommendation4_duration"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="30 min"
+                                android:textColor="@color/text_secondary"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/inter_regular"
+                                android:layout_marginTop="2dp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 

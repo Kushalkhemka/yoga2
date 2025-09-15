@@ -209,8 +209,16 @@ class Preference3Fragment : Fragment() {
                         
                         Toast.makeText(context, "Profile completed! Personalized recommendations ready!", Toast.LENGTH_LONG).show()
                         
-                        // Navigate to the main app (inside1Fragment)
-                        findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)
+                        // Navigate back to the appropriate screen
+                        // Check if we came from profile (edit mode) or onboarding
+                        val cameFromProfile = arguments?.getBoolean("from_profile", false) ?: false
+                        if (cameFromProfile) {
+                            // Navigate back to profile
+                            findNavController().navigate(R.id.action_preference3Fragment_to_profileFragment)
+                        } else {
+                            // Navigate to the main app (inside1Fragment)
+                            findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)
+                        }
                     } else {
                         Toast.makeText(context, "Profile completed! Could not generate recommendations.", Toast.LENGTH_LONG).show()
                         findNavController().navigate(R.id.action_preference3Fragment_to_inside1Fragment)

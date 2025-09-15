@@ -84,7 +84,7 @@
                     android:layout_height="wrap_content"
                     android:text="Yoga Enthusiast"
                     android:textSize="16sp"
-                    android:textColor="@color/primary_700"
+                    android:textColor="@color/text_secondary"
                     android:fontFamily="@font/inter_regular" />
             </LinearLayout>
         </LinearLayout>
@@ -155,7 +155,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="This Week"
-                            android:textColor="@color/primary_700"
+                            android:textColor="@color/text_secondary"
                             android:textSize="14sp"
                             android:fontFamily="@font/inter_medium" />
 
@@ -278,182 +278,12 @@
 
                 </LinearLayout>
 
-                <!-- Weekly Chart -->
-                <LinearLayout
+                <!-- Real-time Weekly Chart -->
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/weeklyChart"
                     android:layout_width="match_parent"
-                    android:layout_height="160dp"
-                    android:orientation="horizontal"
-                    android:gravity="bottom|center_horizontal"
-                    android:layout_marginTop="16dp">
-
-                    <!-- Monday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_90"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Mon"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_medium" />
-                    </LinearLayout>
-
-                    <!-- Tuesday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_30"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Tue"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_medium" />
-                    </LinearLayout>
-
-                    <!-- Wednesday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_80"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Wed"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_bold" />
-                    </LinearLayout>
-
-                    <!-- Thursday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_70"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Thu"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_medium" />
-                    </LinearLayout>
-
-                    <!-- Friday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_60"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Fri"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_medium" />
-                    </LinearLayout>
-
-                    <!-- Saturday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_70"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sat"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_medium" />
-                    </LinearLayout>
-
-                    <!-- Sunday -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal">
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/chart_bar_50"
-                            android:layout_marginBottom="8dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Sun"
-                            android:textSize="12sp"
-                            android:textColor="@color/primary_700"
-                            android:fontFamily="@font/inter_medium" />
-                    </LinearLayout>
-                </LinearLayout>
+                    android:layout_height="180dp"
+                    android:layout_marginTop="16dp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -511,7 +341,7 @@
                         android:layout_height="wrap_content"
                         android:text="Current Streak"
                         android:textSize="14sp"
-                        android:textColor="@color/primary_700"
+                        android:textColor="@color/text_secondary"
                         android:fontFamily="@font/inter_regular" />
                 </LinearLayout>
 
@@ -547,7 +377,7 @@
                         android:layout_height="wrap_content"
                         android:text="Longest Streak"
                         android:textSize="14sp"
-                        android:textColor="@color/primary_700"
+                        android:textColor="@color/text_secondary"
                         android:fontFamily="@font/inter_regular" />
                 </LinearLayout>
             </LinearLayout>
@@ -598,7 +428,7 @@
                         android:layout_height="wrap_content"
                         android:text="3 / 4"
                         android:textSize="14sp"
-                        android:textColor="@color/primary_700"
+                        android:textColor="@color/text_secondary"
                         android:fontFamily="@font/inter_medium" />
                 </LinearLayout>
 
@@ -620,7 +450,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp"
-                android:background="@drawable/goal_card_background">
+                android:background="@drawable/goal_card_background"
+                android:layout_marginBottom="16dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -639,11 +470,12 @@
                         android:fontFamily="@font/inter_medium" />
 
                     <TextView
+                        android:id="@+id/tv_flexibility_percentage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="50%"
+                        android:text="75%"
                         android:textSize="14sp"
-                        android:textColor="@color/primary_700"
+                        android:textColor="@color/text_secondary"
                         android:fontFamily="@font/inter_medium" />
                 </LinearLayout>
 
@@ -653,10 +485,34 @@
                     android:background="@drawable/progress_bar_background" />
 
                 <View
+                    android:id="@+id/progress_flexibility"
                     android:layout_width="0dp"
                     android:layout_height="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/progress_bar_fill_50" />
+            </LinearLayout>
+
+            <!-- Real-time Flexibility Trend Chart -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:background="@drawable/goal_card_background">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Flexibility Trend (Last 7 Days)"
+                    android:textSize="16sp"
+                    android:textColor="@color/neutral_800"
+                    android:fontFamily="@font/inter_medium"
+                    android:layout_marginBottom="16dp" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/flexibilityTrendChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -664,10 +520,9 @@
     <!-- Footer Navigation -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="80dp"
         android:orientation="vertical"
-        android:background="@drawable/footer_background_inside4"
-        android:paddingTop="8dp">
+        android:background="@drawable/footer_background_inside1">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -681,140 +536,135 @@
             <LinearLayout
                 android:id="@+id/btn_home"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_home"
-                    android:tint="@color/primary_700" />
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="Home" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Home"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
-                    android:textColor="@color/primary_700"
-                    android:fontFamily="@font/inter_medium"
-                    android:layout_marginTop="4dp" />
+                    android:fontFamily="@font/inter_medium" />
+
             </LinearLayout>
 
             <!-- Explore -->
             <LinearLayout
                 android:id="@+id/btn_explore"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_search"
-                    android:tint="@color/primary_700" />
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="Explore" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Explore"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
-                    android:textColor="@color/primary_700"
-                    android:fontFamily="@font/inter_medium"
-                    android:layout_marginTop="4dp" />
+                    android:fontFamily="@font/inter_medium" />
+
             </LinearLayout>
 
             <!-- AI -->
             <LinearLayout
                 android:id="@+id/btn_ai"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_ai"
-                    android:tint="@color/primary_700" />
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="AI" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="AI"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
-                    android:textColor="@color/primary_700"
-                    android:fontFamily="@font/inter_medium"
-                    android:layout_marginTop="4dp" />
+                    android:fontFamily="@font/inter_medium" />
+
             </LinearLayout>
 
             <!-- Progress (Active) -->
             <LinearLayout
                 android:id="@+id/btn_progress"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginEnd="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
-                    android:src="@drawable/ic_monitoring_filled"
-                    android:tint="@color/primary_600" />
+                    android:src="@drawable/ic_bar_chart"
+                    android:tint="@color/primary_color"
+                    android:contentDescription="Progress" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Progress"
+                    android:textColor="@color/primary_color"
                     android:textSize="12sp"
-                    android:textColor="@color/primary_600"
-                    android:fontFamily="@font/inter_bold"
-                    android:layout_marginTop="4dp" />
+                    android:fontFamily="@font/inter_medium" />
+
             </LinearLayout>
 
             <!-- Profile -->
             <LinearLayout
                 android:id="@+id/btn_profile"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackground">
+                android:layout_marginStart="4dp">
 
                 <ImageView
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:src="@drawable/ic_person"
-                    android:tint="@color/primary_700" />
+                    android:tint="@color/text_secondary"
+                    android:contentDescription="Profile" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Profile"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp"
-                    android:textColor="@color/primary_700"
-                    android:fontFamily="@font/inter_medium"
-                    android:layout_marginTop="4dp" />
+                    android:fontFamily="@font/inter_medium" />
+
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

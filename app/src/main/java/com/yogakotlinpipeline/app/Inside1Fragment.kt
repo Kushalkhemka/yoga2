@@ -41,8 +41,8 @@ class Inside1Fragment : Fragment() {
     private fun setupClickListeners() {
         // Start Yoga Session Button
         binding.btnStartSession.setOnClickListener {
-            // Navigate to pose detection camera screen
-            findNavController().navigate(R.id.action_inside1Fragment_to_poseDetectionFragment)
+            // Navigate to explore section fragment (Inside2Fragment)
+            findNavController().navigate(R.id.action_inside1Fragment_to_inside2Fragment)
         }
 
         // Notification Button

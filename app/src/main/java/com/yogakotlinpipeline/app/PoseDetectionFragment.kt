@@ -20,6 +20,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.pose.PoseDetection
 import com.google.mlkit.vision.pose.accurate.AccuratePoseDetectorOptions
 import com.yogakotlinpipeline.app.databinding.FragmentPoseDetectionBinding
+import com.yogakotlinpipeline.app.utils.SessionTracker
 import java.util.concurrent.Executors
 
 class PoseDetectionFragment : Fragment() {
@@ -56,6 +57,9 @@ class PoseDetectionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupClickListeners()
         checkCameraPermission()
+        
+        // Start tracking yoga session
+        SessionTracker.startYogaSession(requireContext())
     }
 
     private fun setupClickListeners() {
@@ -68,6 +72,8 @@ class PoseDetectionFragment : Fragment() {
         }
 
         binding.btnStopSession.setOnClickListener {
+            // End yoga session tracking
+            SessionTracker.endYogaSession(requireContext())
             findNavController().navigateUp()
         }
     }
@@ -180,6 +186,8 @@ class PoseDetectionFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        // End yoga session tracking when fragment is destroyed
+        SessionTracker.endYogaSession(requireContext())
         _binding = null
     }
 }

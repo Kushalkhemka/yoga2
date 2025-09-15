@@ -86,7 +86,7 @@ class Inside2Fragment : Fragment() {
             }
 
             try {
-                findNavController().navigate(R.id.action_exploreFragment_to_youtubeVideoFragment, bundle)
+                findNavController().navigate(R.id.action_inside2Fragment_to_youtubeVideoFragment, bundle)
             } catch (e: Exception) {
                 // Fallback directly to the fragment id if action not resolved
                 try {
