@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -38,6 +39,8 @@ class PoseCalibrationFragment : Fragment() {
     
     private lateinit var poseDetector: PoseDetector
     private var poseName: String = ""
+    // Canonical key used to match CSV rows (lowercase, normalized)
+    private var poseKey: String = ""
     private var poseThresholds: Map<String, PoseThreshold> = emptyMap()
     private var lensFacing = CameraSelector.LENS_FACING_BACK
     
@@ -48,6 +51,17 @@ class PoseCalibrationFragment : Fragment() {
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+    }
+
+    private val cameraPermissionRequest = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            startCamera()
+        } else {
+            Toast.makeText(context, "Camera permission required", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
+        }
     }
     
     override fun onCreateView(
@@ -64,9 +78,9 @@ class PoseCalibrationFragment : Fragment() {
         
         // Get pose name from arguments and normalize to match CSV entries
         poseName = arguments?.getString("pose_name") ?: "Dandasana"
-        poseName = normalizePoseName(poseName)
+        poseKey = normalizePoseNameToCsvKey(poseName)
         
-        // Update the pose title display
+        // Update the pose title display (keep original name for UI)
         binding.tvPoseTitle.text = "Calibrating: $poseName"
         
         // Initialize pose detector
@@ -79,9 +93,7 @@ class PoseCalibrationFragment : Fragment() {
         if (allPermissionsGranted()) {
             startCamera()
         } else {
-            ActivityCompat.requestPermissions(
-                requireActivity(), REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
+            cameraPermissionRequest.launch(Manifest.permission.CAMERA)
         }
         
         // Set up click listeners
@@ -122,7 +134,7 @@ class PoseCalibrationFragment : Fragment() {
                 val parts = line.split(",")
                 // CSV header: pose,joint,mean,std,learned_multiplier,min_angle,max_angle
                 // We must read min_angle at index 5 and max_angle at index 6
-                if (parts.size >= 7 && parts[0] == poseName) {
+                if (parts.size >= 7 && parts[0].trim().lowercase() == poseKey) {
                     val joint = parts[1]
                     val minAngle = parts[5].toFloatOrNull() ?: 0f
                     val maxAngle = parts[6].toFloatOrNull() ?: 180f
@@ -139,12 +151,40 @@ class PoseCalibrationFragment : Fragment() {
             Toast.makeText(context, "Error loading pose thresholds: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
-    private fun normalizePoseName(input: String): String {
-        return when (input.trim()) {
-            "Naukasana", "Naukasan", "Boat", "Boat Pose", "Boat pose" -> "Boat pose"
-            // Add more aliases here if needed in future
-            else -> input.trim()
+    
+    // Map various display names/aliases to the canonical CSV key (all lowercase)
+    private fun normalizePoseNameToCsvKey(input: String): String {
+        return when (input.trim().lowercase()) {
+            // Boat pose
+            "naukasana", "naukasan", "boat", "boat pose" -> "boat pose"
+            // Chakrasana
+            "chakrasana", "wheel", "wheel pose" -> "chakrasana"
+            // Dandasana
+            "dandasana", "staff pose" -> "dandasana"
+            // Gomukhasana
+            "gomukh", "gomukhasana", "cow face pose" -> "gomukhasana"
+            // Raja Kapotasana / King Pigeon
+            "raja kapotasana", "eka pada rajakapotasana", "king pigeon pose", "king pigeon", "pigeon pose" -> "king pigeon"
+            // Parsvottanasana
+            "parsvottanasana", "pyramid pose" -> "parsvottanasana"
+            // Paschimottanasana
+            "paschimottanasana", "pashimottanasana", "seated forward bend" -> "paschimottanasana"
+            // Prasarita Padottanasana
+            "prasarita padottanasana", "wide-legged forward bend" -> "prasarita padottanasana"
+            // Trikonasana (CSV has a typo "Trikonsana")
+            "trikonasan", "trikonasana", "triangle pose" -> "trikonsana"
+            // Standing Split (Urdhva Prasarita Eka Padasana)
+            "urdhva prasarita eka padasana", "standing split", "standing splits" -> "urdhva prasarita eka padasana"
+            // Vrksasana (Tree)
+            "vrikshasan", "vrksasana", "tree pose", "warrior pose 2", "warrior ii pose", "virabhadrasana ii", "warrior 2" -> {
+                // Disambiguate: keep warrior/vrksasana to their own keys
+                if (input.trim().lowercase().contains("warrior")) "warrior ii pose" else "vrksasana"
+            }
+            // Warrior II
+            "warrior ii pose", "warrior 2", "virabhadrasana ii" -> "warrior ii pose"
+            // Yoganidrasana
+            "yogaindrasana", "yoganidrasana" -> "yoganidrasana"
+            else -> input.trim().lowercase()
         }
     }
     
@@ -225,13 +265,7 @@ class PoseCalibrationFragment : Fragment() {
         permissions: Array<String>,
         grantResults: IntArray
     ) {
-        if (requestCode == REQUEST_CODE_PERMISSIONS) {
-            if (allPermissionsGranted()) {
-                startCamera()
-            } else {
-                Toast.makeText(context, "Camera permission required", Toast.LENGTH_SHORT).show()
-            }
-        }
+        // No-op: using Activity Result API for permissions
     }
     
     override fun onDestroyView() {

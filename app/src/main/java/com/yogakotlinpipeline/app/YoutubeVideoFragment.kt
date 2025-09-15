@@ -15,11 +15,7 @@ class YoutubeVideoFragment : Fragment() {
     
     private var _binding: FragmentYoutubeVideoBinding? = null
     private val binding get() = _binding!!
-    private var timeoutHandler: android.os.Handler? = null
-    private var timeoutRunnable: Runnable? = null
-    private var hasTriedFallback = false
-    private var currentVideoId = ""
-    private var currentStartSeconds = 0
+    private var currentVideoId: String = ""
     
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,19 +47,14 @@ class YoutubeVideoFragment : Fragment() {
         
         // Get video ID and optional start time for the pose
         val (videoId, startSeconds) = getVideoInfoForPose(poseName)
-        Log.d("YoutubeVideoFragment", "Video ID: $videoId start: $startSeconds")
-        
-        // Store current video info for fallback
         currentVideoId = videoId
-        currentStartSeconds = startSeconds
+        Log.d("YoutubeVideoFragment", "Video ID: $videoId start: $startSeconds")
         
         // Load YouTube video directly
         loadYouTubeVideo(videoId, startSeconds)
         
         // Add a fallback button in case video doesn't load
         binding.btnSkipVideo.text = "Watched Tutorial? Let's Do It"
-        
-        // Note: Retry functionality is handled automatically via fallback mechanism
         
         // Set up back button
         binding.btnBack.setOnClickListener {
@@ -78,27 +69,25 @@ class YoutubeVideoFragment : Fragment() {
     }
     
     private fun getVideoInfoForPose(poseName: String): Pair<String, Int> {
+        Log.d("YoutubeVideoFragment", "Getting video info for pose: '$poseName' (lowercase: '${poseName.lowercase()}')")
         val url = when (poseName.lowercase()) {
-            // Map exact Sanskrit names from YogaAsanaDataProvider
-            "gomukhasana", "gomukh", "cow face pose" -> "https://www.youtube.com/watch?v=CwUw_2HpTdM"
-            "vrksasana", "vrikshasan", "tree pose" -> "https://www.youtube.com/watch?v=SPJYQDkaZ3w"
+            // Provided links
+            "gomukh", "gomukhasana", "cow face pose" -> "https://www.youtube.com/watch?v=CwUw_2HpTdM"
+            "vrikshasan", "vrksasana", "tree pose" -> "https://www.youtube.com/watch?v=SPJYQDkaZ3w"
             "urdhva prasarita eka padasana", "standing split", "standing splits" -> "https://www.youtube.com/watch?v=c30T6q7AVsU"
-            "virabhadrasana ii", "warrior pose 2", "warrior ii pose", "warrior 2" -> "https://youtu.be/azCEB_BDWxg?t=106"
-            "paschimottanasana", "pashimottanasana", "seated forward bend" -> "https://www.youtube.com/watch?v=qsJMLBcvcU0"
-            "naukasana", "boat pose", "navasana", "boat" -> "https://www.youtube.com/watch?v=SFzxXr-if68"
-            "dandasana", "staff pose" -> "https://www.youtube.com/watch?v=yIt2lNAcVeY"
-            "trikonasana", "trikonasan", "triangle pose" -> "https://www.youtube.com/shorts/wRqvn2N9V7g"
-            "chakrasana", "chakrasan", "wheel pose" -> "https://www.youtube.com/watch?v=NiDhg35OCxI" // Original video - will show embedding restriction message
-            "parsvottanasana", "pyramid pose" -> "https://www.youtube.com/shorts/cQJTNWWEH-Y"
-            "yoganidrasana", "yogaindrasana", "yogic sleep pose" -> "https://www.youtube.com/shorts/htGkI9ALWow"
-            "raja kapotasana", "king pigeon", "king pigeon pose", "eka pada rajakapotasana", "rajakapotasana", "pigeon pose" -> "https://www.youtube.com/shorts/TfR3e-5PGJU"
+            "warrior pose 2", "warrior ii pose", "virabhadrasana ii", "warrior 2" -> "https://youtu.be/azCEB_BDWxg?t=106"
+            "paschimottanasana", "pashimottanasana", "seated forward bend" -> "https://www.youtube.com/watch?v=qsJMLBCvcU0"
+            "boat pose", "navasana", "boat", "naukasana", "naukasan" -> "https://www.youtube.com/watch?v=SfzxXr-If68"
+            "dandasana", "staff pose" -> "https://www.youtube.com/watch?v=yIt2INAcVeY"
+            "trikonasan", "trikonasana", "triangle pose" -> "https://www.youtube.com/shorts/wRqvn2N9V7g"
+            "chakrasan", "chakrasana", "wheel pose" -> "https://www.youtube.com/shorts/C5clWWOm-Yc"
+            "parsvottanasana", "pyramid pose" -> "https://www.youtube.com/shorts/cQJTNwWEH-Y"
+            "yogaindrasana", "yoganidrasana" -> "https://www.youtube.com/shorts/htGkI9ALWow"
+            "king pigeon", "king pigeon pose", "eka pada rajakapotasana", "rajakapotasana", "pigeon pose" -> "https://www.youtube.com/shorts/TfR3e-5PGJU"
             "prasarita padottanasana", "wide-legged forward bend" -> "https://www.youtube.com/watch?v=cnyUaieabic"
-            else -> {
-                Log.w("YoutubeVideoFragment", "No video mapping found for pose: $poseName, using default")
-                "https://www.youtube.com/watch?v=CwUw_2HpTdM"
-            }
+            else -> "https://www.youtube.com/watch?v=CwUw_2HpTdM"
         }
-        Log.d("YoutubeVideoFragment", "Mapped pose '$poseName' to URL: $url")
+        Log.d("YoutubeVideoFragment", "Selected URL for pose '$poseName': $url")
         return parseYouTubeUrl(url)
     }
 
@@ -150,47 +139,10 @@ class YoutubeVideoFragment : Fragment() {
     }
     
     private fun loadYouTubeVideo(videoId: String, startSeconds: Int = 0) {
-        loadYouTubeVideoWithUrl(videoId, startSeconds, false)
-    }
-    
-    private fun loadYouTubeVideoWithUrl(videoId: String, startSeconds: Int = 0, isFallback: Boolean = false) {
         val startParam = if (startSeconds > 0) "&start=$startSeconds" else ""
-        val embedUrl = if (isFallback) {
-            // Fallback: Use direct YouTube watch URL instead of embed
-            "https://www.youtube.com/watch?v=$videoId$startParam"
-        } else {
-            // Try multiple approaches to avoid Error 153
-            when {
-                // First try: youtube-nocookie.com with minimal parameters
-                !hasTriedFallback -> "https://www.youtube-nocookie.com/embed/$videoId?enablejsapi=1&playsinline=1$startParam"
-                // Second try: Regular youtube.com with minimal parameters
-                else -> "https://www.youtube.com/embed/$videoId?enablejsapi=1&playsinline=1$startParam"
-            }
-        }
-        
-        Log.d("YoutubeVideoFragment", "Loading YouTube video with embed URL: $embedUrl (fallback: $isFallback)")
-        
-        // Set up a timeout to detect if video fails to load
-        timeoutHandler = android.os.Handler(android.os.Looper.getMainLooper())
-        timeoutRunnable = Runnable {
-            if (_binding?.progressLoading?.visibility == View.VISIBLE) {
-                Log.w("YoutubeVideoFragment", "Video loading timeout after 15 seconds")
-                _binding?.progressLoading?.visibility = View.GONE
-                android.widget.Toast.makeText(context, "Video loading timeout - you can skip and continue", android.widget.Toast.LENGTH_LONG).show()
-                _binding?.btnSkipVideo?.visibility = View.VISIBLE
-                _binding?.btnSkipVideo?.text = "Skip Video & Continue"
-            }
-        }
-        timeoutHandler?.postDelayed(timeoutRunnable!!, 15000) // 15 second timeout
+        val embedUrl = "https://www.youtube.com/embed/$videoId?autoplay=1&rel=0&showinfo=0&enablejsapi=1&origin=https://www.youtube.com&playsinline=1$startParam"
         
         _binding?.webViewVideo?.apply {
-            // Enable cookies for YouTube auth/consent flows
-            try {
-                val cm = android.webkit.CookieManager.getInstance()
-                cm.setAcceptCookie(true)
-                android.webkit.CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
-            } catch (_: Throwable) {}
-
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
             settings.mediaPlaybackRequiresUserGesture = false
@@ -204,24 +156,15 @@ class YoutubeVideoFragment : Fragment() {
             settings.builtInZoomControls = false
             settings.displayZoomControls = false
             
-            // Enhanced YouTube-specific settings
-            settings.cacheMode = android.webkit.WebSettings.LOAD_DEFAULT
-            settings.databaseEnabled = true
-            settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-            
-            // Additional settings for better video playback
-            settings.setGeolocationEnabled(false)
-            
-            // Add JavaScript interface for video completion and error detection
+            // Add JavaScript interface for video completion detection and external open
             addJavascriptInterface(object {
                 @android.webkit.JavascriptInterface
                 fun onVideoCompleted() {
                     this@YoutubeVideoFragment.onVideoCompleted()
                 }
-                
                 @android.webkit.JavascriptInterface
-                fun onVideoError(errorMessage: String) {
-                    this@YoutubeVideoFragment.onVideoError(errorMessage)
+                fun onOpenExternally() {
+                    this@YoutubeVideoFragment.openInYouTube(currentVideoId)
                 }
             }, "Android")
             
@@ -236,74 +179,35 @@ class YoutubeVideoFragment : Fragment() {
                     super.onPageFinished(view, url)
                     Log.d("YoutubeVideoFragment", "YouTube video loaded successfully")
                     _binding?.progressLoading?.visibility = View.GONE
-                    
-                    // Cancel timeout since video loaded successfully
-                    timeoutRunnable?.let { runnable ->
-                        timeoutHandler?.removeCallbacks(runnable)
-                    }
-                    
-                    // Inject JavaScript to detect video completion and configuration errors
+                    // Inject JavaScript to detect video completion
                     if (_binding != null && isAdded) {
                         injectVideoCompletionDetection()
-                        injectVideoErrorDetection()
-                        injectYouTubeIFrameAPI()
+                        injectWatchOnYouTubeDetection()
                     }
                 }
                 
                 override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
                     // Allow YouTube URLs to load
                     Log.d("YoutubeVideoFragment", "Loading URL: $url")
-                    return false
+                    if (url == null) return false
+                    val lower = url.lowercase()
+                    val isWatch = lower.contains("youtube.com/watch") || lower.contains("youtu.be/")
+                    val isConsent = lower.contains("consent.youtube.com")
+                    val isNoCookie = lower.contains("youtube-nocookie.com")
+                    if (isWatch || isConsent) {
+                        // Open externally to bypass embed restrictions / error 153
+                        openInYouTube(currentVideoId)
+                        return true
+                    }
+                    // Allow regular embed navigation
+                    return isNoCookie
                 }
                 
                 override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
                     super.onReceivedError(view, errorCode, description, failingUrl)
-                    Log.e("YoutubeVideoFragment", "WebView error: $errorCode - $description for URL: $failingUrl")
+                    Log.e("YoutubeVideoFragment", "WebView error: $errorCode - $description")
                     _binding?.progressLoading?.visibility = View.GONE
-                    
-                    // Show user-friendly error message
-                    val errorMessage = when (errorCode) {
-                        -2 -> "Video unavailable - may be restricted or removed"
-                        -6 -> "Video unavailable - embedding may be disabled"
-                        -8 -> "Video unavailable - network error"
-                        153 -> "Video player configuration error - YouTube restrictions"
-                        else -> "Video player configuration error: $description"
-                    }
-                    
-                    android.widget.Toast.makeText(context, errorMessage, android.widget.Toast.LENGTH_LONG).show()
-                    
-                    // Try multiple fallback approaches for error 153
-                    if (errorCode == 153 && !hasTriedFallback) {
-                        hasTriedFallback = true
-                        Log.d("YoutubeVideoFragment", "Attempting fallback for error 153")
-                        // Try different embed approach first, then direct URL
-                        loadYouTubeVideoWithUrl(getCurrentVideoId(), getCurrentStartSeconds(), false)
-                        return
-                    }
-                    
-                    // Show skip button more prominently when video fails
-                    _binding?.btnSkipVideo?.visibility = View.VISIBLE
-                    _binding?.btnSkipVideo?.text = "Skip Video & Continue"
-                }
-                
-                override fun onReceivedHttpError(view: WebView?, request: android.webkit.WebResourceRequest?, errorResponse: android.webkit.WebResourceResponse?) {
-                    super.onReceivedHttpError(view, request, errorResponse)
-                    Log.e("YoutubeVideoFragment", "HTTP error: ${errorResponse?.statusCode} for URL: ${request?.url}")
-                    
-                    if (errorResponse?.statusCode == 403 || errorResponse?.statusCode == 404) {
-                        _binding?.progressLoading?.visibility = View.GONE
-                        android.widget.Toast.makeText(context, "Video player configuration error - video may be restricted", android.widget.Toast.LENGTH_LONG).show()
-                        _binding?.btnSkipVideo?.visibility = View.VISIBLE
-                        _binding?.btnSkipVideo?.text = "Skip Video & Continue"
-                    }
-                }
-            }
-
-            // Needed for proper JS dialogs/fullscreen handling and better compatibility
-            webChromeClient = object : android.webkit.WebChromeClient() {
-                override fun onConsoleMessage(message: android.webkit.ConsoleMessage?): Boolean {
-                    Log.d("YoutubeVideoFragment", "console: ${message?.message()}")
-                    return super.onConsoleMessage(message)
+                    android.widget.Toast.makeText(context, "Failed to load video: $description", android.widget.Toast.LENGTH_SHORT).show()
                 }
             }
             
@@ -345,73 +249,48 @@ class YoutubeVideoFragment : Fragment() {
         
         _binding?.webViewVideo?.loadUrl(javascript)
     }
-    
-    private fun injectVideoErrorDetection() {
-        val javascript = """
-            javascript:
-            (function() {
-                // Function to check for video player errors
-                function checkVideoErrors() {
-                    // Check for YouTube error messages
-                    var errorElements = document.querySelectorAll('.ytp-error, .ytp-error-content, .ytp-error-text');
-                    if (errorElements.length > 0) {
-                        var errorText = '';
-                        errorElements.forEach(function(element) {
-                            errorText += element.textContent + ' ';
-                        });
-                        if (errorText.trim()) {
-                            window.Android.onVideoError('YouTube Error: ' + errorText.trim());
+
+    private fun injectWatchOnYouTubeDetection() {
+        val js = """
+            javascript:(function(){
+                function checkPrompt(){
+                    // Look for common UI when embeds are blocked
+                    var btns = document.querySelectorAll('a, button');
+                    for (var i=0;i<btns.length;i++){
+                        var t = (btns[i].innerText||'').toLowerCase();
+                        if (t.includes('watch on youtube') || t.includes('open app')){
+                            window.Android.onOpenExternally();
                             return;
                         }
                     }
-                    
-                    // Check for video player configuration errors
-                    var player = document.querySelector('#player');
-                    if (player) {
-                        var iframe = player.querySelector('iframe');
-                        if (iframe && iframe.src.includes('embed')) {
-                            // Check if iframe is blocked or has errors
-                            if (iframe.style.display === 'none' || iframe.style.visibility === 'hidden') {
-                                window.Android.onVideoError('Video player configuration error - iframe blocked');
-                                return;
-                            }
-                        }
-                    }
-                    
-                    // Check for "Video unavailable" text
-                    var unavailableText = document.querySelector('*');
-                    if (unavailableText && unavailableText.textContent && 
-                        unavailableText.textContent.toLowerCase().includes('video unavailable')) {
-                        window.Android.onVideoError('Video unavailable - may be restricted or removed');
+                    // Also scan for error code text 153
+                    var bodyText = document.body ? (document.body.innerText||'') : '';
+                    if (bodyText.toLowerCase().includes('153') || bodyText.toLowerCase().includes('video player configuration error')){
+                        window.Android.onOpenExternally();
                         return;
                     }
-                    
-                    // Check for error 153 or configuration error messages
-                    var errorText = document.body ? document.body.textContent : '';
-                    if (errorText && (
-                        errorText.includes('error 153') || 
-                        errorText.includes('video player configuration error') ||
-                        errorText.includes('An error occurred') ||
-                        errorText.includes('Playback error')
-                    )) {
-                        window.Android.onVideoError('Video player configuration error detected');
-                        return;
-                    }
-                    
-                    // Check again in 3 seconds
-                    setTimeout(checkVideoErrors, 3000);
+                    setTimeout(checkPrompt, 2000);
                 }
-                
-                // Start checking after a delay to ensure page is loaded
-                setTimeout(checkVideoErrors, 2000);
+                setTimeout(checkPrompt, 2000);
             })();
         """.trimIndent()
-        
-        _binding?.webViewVideo?.loadUrl(javascript)
+        _binding?.webViewVideo?.loadUrl(js)
     }
-    
-    private fun getCurrentVideoId(): String = currentVideoId
-    private fun getCurrentStartSeconds(): Int = currentStartSeconds
+
+    private fun openInYouTube(videoId: String) {
+        try {
+            val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse("vnd.youtube:" + videoId))
+            intent.putExtra("VIDEO_ID", videoId)
+            intent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+        } catch (_: Throwable) {
+            // Fallback to browser
+            val url = "https://www.youtube.com/watch?v=" + videoId
+            val browserIntent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(url))
+            browserIntent.addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(browserIntent)
+        }
+    }
     
     private fun setupActionButtons() {
         // Skip Video Button
@@ -447,26 +326,6 @@ class YoutubeVideoFragment : Fragment() {
                 "Video completed! Ready to practice?",
                 android.widget.Toast.LENGTH_SHORT
             ).show()
-        }
-    }
-    
-    // This method will be called from JavaScript when video has errors
-    fun onVideoError(errorMessage: String) {
-        if (_binding == null || !isAdded || viewLifecycleOwner.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.DESTROYED) && !viewLifecycleOwner.lifecycle.currentState.isAtLeast(androidx.lifecycle.Lifecycle.State.STARTED)) return
-        activity?.runOnUiThread {
-            Log.e("YoutubeVideoFragment", "Video error detected: $errorMessage")
-            _binding?.progressLoading?.visibility = View.GONE
-            
-            // Show error message to user
-            android.widget.Toast.makeText(
-                context,
-                errorMessage,
-                android.widget.Toast.LENGTH_LONG
-            ).show()
-            
-            // Show skip button prominently
-            _binding?.btnSkipVideo?.visibility = View.VISIBLE
-            _binding?.btnSkipVideo?.text = "Skip Video & Continue"
         }
     }
     
@@ -513,14 +372,6 @@ class YoutubeVideoFragment : Fragment() {
     
     override fun onDestroyView() {
         super.onDestroyView()
-        
-        // Clean up timeout handler
-        timeoutRunnable?.let { runnable ->
-            timeoutHandler?.removeCallbacks(runnable)
-        }
-        timeoutHandler = null
-        timeoutRunnable = null
-        
         try {
             _binding?.webViewVideo?.apply {
                 stopLoading()
@@ -531,37 +382,5 @@ class YoutubeVideoFragment : Fragment() {
             }
         } catch (_: Throwable) {}
         _binding = null
-    }
-    
-    private fun injectYouTubeIFrameAPI() {
-        val javascript = """
-            javascript:
-            (function() {
-                // Load YouTube IFrame API if not already loaded
-                if (typeof YT === 'undefined') {
-                    var tag = document.createElement('script');
-                    tag.src = "https://www.youtube.com/iframe_api";
-                    var firstScriptTag = document.getElementsByTagName('script')[0];
-                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                    
-                    // Set up the API ready callback
-                    window.onYouTubeIframeAPIReady = function() {
-                        console.log('YouTube IFrame API loaded successfully');
-                        // Try to find and initialize any YouTube players
-                        var iframes = document.querySelectorAll('iframe[src*="youtube.com/embed"]');
-                        iframes.forEach(function(iframe) {
-                            try {
-                                var player = new YT.Player(iframe);
-                                console.log('YouTube player initialized');
-                            } catch (e) {
-                                console.log('Could not initialize YouTube player:', e);
-                            }
-                        });
-                    };
-                }
-            })();
-        """.trimIndent()
-
-        _binding?.webViewVideo?.loadUrl(javascript)
     }
 }

@@ -73,9 +73,11 @@
                 <ImageView
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:src="@drawable/profile_sophia"
+                    android:src="@drawable/amelia_avatar"
                     android:scaleType="centerCrop"
                     android:background="@drawable/profile_image_background"
+                    android:clipToOutline="true"
+                    android:outlineProvider="background"
                     android:layout_marginBottom="16dp" />
 
                 <!-- Profile Info -->
